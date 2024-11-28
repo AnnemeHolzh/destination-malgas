@@ -1,6 +1,22 @@
+// src/app/layout.tsx
+import React from 'react';
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import Link from 'next/link';
+import Script from 'next/script';
+import Image from 'next/image';
+
+import DMBlackLogo from '../app/Assets/Logo/logoBlackTransparent.svg';
+import FooterLogo from '../app/Assets/Logo/footer_logo.svg';
+import BurgerIcon from '../app/Assets/Landing/Icon/burgerIcon.svg';
+import EmailIcon from '../app/Assets/Footer/Icon/emailIcon.svg';
+import PhoneIcon from '../app/Assets/Footer/Icon/phoneIcon.svg';
+import FacebookIcon from '../app/Assets/Footer/Icon/facebookIcon.svg';
+import InstagramIcon from '../app/Assets/Footer/Icon/instagramIcon.svg';
+import LinkedInIcon from '../app/Assets/Footer/Icon/linkedInIcon.svg';
+import TikTokIcon from '../app/Assets/Footer/Icon/tiktokIcon.svg';
+import YouTubeIcon from '../app/Assets/Footer/Icon/youtubeIcon.svg';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -25,10 +41,120 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Destination Malgas</title>
+      </head>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <header>
+          <nav className="navbar">
+            <div className="container">
+              <div className="navbar-header">
+                <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+                  <Image 
+                    id="logo" 
+                    src={DMBlackLogo}
+                    alt="Destination Malgas Logo" 
+                    layout="responsive"
+                    width={50}
+                    height={50}
+                  />
+                  <canvas id="color-canvas" style={{ display: 'none' }}></canvas>
+                </Link>
+              </div>
+
+              <button className="navbar-toggler" type="button">
+                <Image src={BurgerIcon} alt="Menu" layout="responsive" width={50} height={50}/>
+              </button>
+              {/* Sidebar Menu */}
+              <div className="sidebar">
+                <ul className="sidebar-nav">
+                  <li className="nav-item"><Link className="nav-link" href="/">HOME</Link></li>
+                  <li className="nav-item"><Link className="nav-link" href="/Accommodation">ACCOMMODATION</Link></li>
+                  <li className="nav-item"><Link className="nav-link" href="/Boating">BOATING</Link></li>
+                  <li className="nav-item"><Link className="nav-link" href="/Marketing">MARKETING</Link></li>
+                  <li className="nav-item"><Link className="nav-link" href="/Destination">DESTINATION</Link></li>
+                  <li className="nav-item"><Link className="nav-link" href="/Contact/ContactUs">CONTACT US</Link></li>
+                </ul>
+              </div>
+              <ul className="navbar-nav">
+                <li className="nav-item"><Link className="nav-link" href="/">HOME</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/Accommodation">ACCOMMODATION</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/Boating">BOATING</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/Marketing">MARKETING</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/Destination">DESTINATION</Link></li>
+                <li className="nav-item"><Link className="nav-link" href="/Contact/ContactUs">CONTACT US</Link></li>
+              </ul>
+            </div>
+          </nav>
+        </header>
+        <div>
+          {children}
+        </div>
+
+        <footer className="border-top footer text-muted">
+          <div className="footer-column left">
+            <h3>Our Location</h3>
+            <p>
+              OFFICE & SHOP:<br />
+              PLOT 412, DIEPKLOOF, MALGAS, WC<br />
+              Tar Road Diepkloof<br />
+              Next to The Boathouse Pub & Pizza, Malgas, WC, 6740
+            </p>
+          </div>
+          <div className="footer-column center">
+            <Image 
+              src={FooterLogo} 
+              alt="Footer Logo" 
+              className="responsive-image" 
+              layout="responsive" 
+              height={50}
+              width={50}
+            />
+          </div>
+          <div className="footer-column right">
+            <h3>Contact Us!</h3>
+            <div className="contact-info">
+              <div className="contact-item">
+                <Image 
+                  src={EmailIcon} 
+                  alt="Email Icon" 
+                  className="contact-icon" 
+                  layout="responsive" 
+                  height={50}
+                  width={50}
+                />
+                <p>
+                  <a href="mailto:twan@destinationmalgas.co.za">twan@destinationmalgas.co.za</a><br />
+                </p>
+              </div>
+              <div className="contact-item">
+                <Image 
+                  src={PhoneIcon} 
+                  alt="Phone Icon" 
+                  className="contact-icon" 
+                  layout="responsive"
+                  height={50}
+                  width={50}
+                />
+                <p>
+                  <a href="https://wa.me/27671629081" target="_blank">+27 (0) 671 629 081</a>
+                </p>
+              </div>
+            </div>
+
+            <div className="icons-section">
+              <Image src={FacebookIcon} alt="Facebook Icon" className="footer-icon" layout="responsive" width={50} height={50}/>
+              <Image src={InstagramIcon} alt="Instagram Icon" className="footer-icon" layout="responsive" width={50} height={50}/>
+              <Image src={LinkedInIcon} alt="LinkedIn Icon" className="footer-icon" layout="responsive" width={50} height={50}/>
+              <Image src={TikTokIcon} alt="TikTok Icon" className="footer-icon" layout="responsive" width={50} height={50}/>
+              <Image src={YouTubeIcon} alt="YouTube Icon" className="footer-icon" layout="responsive" width={50} height={50}/>
+            </div>
+          </div>
+        </footer>
+        <Script src="../app/js/site.js" strategy="lazyOnload" />
+        <Script src="../app/js/LogoColourChange.js" strategy="lazyOnload" />
       </body>
     </html>
   );

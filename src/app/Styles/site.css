@@ -1,0 +1,294 @@
+html {
+    font-size: 16px; /* Base font size for scaling */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    position: fixed; /* Fix the navbar at the top of the page */
+    width: 100%;
+    background-color: transparent; /* Semi-transparent background if needed */
+    padding: 1% 0; /* Adjust padding as needed */
+    transition: transform 0.3s ease; /* Smooth transition for hiding/showing */
+    z-index: 1000; /* High value to ensure it stays on top of other elements */
+}
+
+.header-hidden {
+    transform: translateY(-100%); /* Move the navbar out of view */
+}
+
+.navbar-toggler {
+    border: none;
+    background: none;
+    color: white; /* Adjust color as needed */
+    font-size: 1.5em; /* Adjust icon size */
+}
+
+.navbar {
+    background-color: transparent;
+    overflow: hidden;
+    width: 100%;
+}
+
+    .navbar .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 2%; /* Add padding to the sides to give more space */
+    }
+
+.navbar-header {
+    display: flex;
+    align-items: center;
+    flex: 1; /* Take up available space on the left */
+}
+
+    .navbar-header .navbar-brand img {
+        width: 10vw; /* Adjust this value to your desired width */
+        height: auto;
+        top: 1.5vw;/* Maintains the aspect ratio */
+    }
+
+.navbar-nav {
+    list-style-type: none;
+    display: flex;
+    margin: 0; /* Remove default margins */
+    padding: 0; /* Remove default padding */
+    flex: 2; /* Take up available space on the right */
+    justify-content: flex-end; /* Align links to the right */
+}
+
+    .navbar-nav .nav-item {
+        padding: 0 4%; /* Adjust spacing between items as needed */
+    }
+
+.nav-link {
+    font-family: 'NavbarFont', sans-serif;
+    color: lightgrey;
+    text-decoration: none;
+    font-size: 0.8vw;
+}
+
+    .nav-link:hover {
+        color: gray;
+    }
+
+.nav-item.active .nav-link {
+    color: black;
+}
+
+/* Styles for the hamburger icon */
+.navbar-toggler {
+    display: none; /* Hide by default */
+    border: none;
+    background: none;
+    color: white; /* Adjust color as needed */
+    cursor: pointer; /* Pointer cursor to indicate it's clickable */
+}
+
+    /* Adjust the size of the hamburger icon */
+    .navbar-toggler img {
+        width: 6vw; /* Set the desired width for the icon */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+/* Styles for the sidebar */
+.sidebar {
+    position: fixed;
+    top: 0;
+    right: -25vw; /* Hide the sidebar offscreen by default */
+    width: 25vw; /* Adjust the width as needed */
+    height: 100vh;
+    background-color: #333; /* Background color for the sidebar */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional shadow for the sidebar */
+    transition: right 0.3s ease; /* Smooth transition for sliding in and out */
+    z-index: 1000; /* Ensure it stays on top */
+    overflow-y: auto; /* Scrollable if content exceeds height */
+}
+
+/* Sidebar navigation items */
+.sidebar-nav {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .sidebar-nav .nav-item {
+        padding: 2vw;
+    }
+
+    .sidebar-nav .nav-link {
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-size: 1.6vw;
+    }
+
+/* Show the sidebar when the menu is active */
+.sidebar-active {
+    right: 0; /* Slide the sidebar into view */
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .navbar-nav {
+        display: none; /* Hide the original navbar items on smaller screens */
+    }
+
+    .navbar-toggler {
+        display: block; /* Show the hamburger icon */
+    }
+}
+
+
+footer {
+    height: auto;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: #202020; /* Adjust this color as needed */
+    padding: 10px; /* Adjust padding if needed */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    clear:both;
+    position: relative;
+    bottom: 0vh;
+}
+
+.footer-column {
+    flex: 1; /* Each column takes up equal space */
+    padding: 0 10px; /* Adjust horizontal padding as needed */
+    box-sizing: border-box; /* Include padding in the element's total width */
+}
+
+    .footer-column.left {
+        text-align: left; /* Align text to the left */
+    }
+
+    .footer-column.right {
+        text-align: right; /* Align text to the right */
+    }
+
+    .footer-column h3 {
+        font-family: 'FooterHeading';
+        color: white;
+        font-size: 2vw; /* Adjust as needed */
+    }
+
+    .footer-column p {
+        font-family: 'FooterBody';
+        color: white;
+        font-size: 1vw; /* Adjust text size as needed */
+        line-height: 1.5; /* Improve vertical alignment */
+        margin-top: 1vh;
+    }
+
+    .footer-column.left h3 {
+        margin-top: 8vw;
+    }
+
+    .footer-column.right h3 {
+        margin-top: 8vw;
+    }
+
+    .footer-column.left p {
+        margin-top: 1vw;
+    }
+
+    .footer-column.right p {
+        margin-top: 0.8vw;
+    }
+
+.responsive-image {
+    max-width: 100%; /* Ensure the image does not exceed the container's width */
+    height: auto; /* Maintain aspect ratio */
+}
+
+    @font-face {
+        font-family: 'NavbarFont';
+        src: url('/Assets/Fonts/Montserrat-Medium.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+
+    @font-face {
+        font-family: 'FooterHeading';
+        src: url('/Assets/Fonts/Montserrat-Bold.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+
+    @font-face {
+        font-family: 'FooterBody';
+        src: url('/Assets/Fonts/Montserrat-Regular.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+.contact-info {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-end; /* Align items to the end of the flex container (right side) */
+    gap: 0.5vw; /* Space between items */
+}
+
+.contact-item {
+    display: flex;
+    align-items: center; /* Center items vertically */
+    gap: 0.5vw; /* Space between image and text */
+    flex-direction: row-reverse; /* Reverse the order so the icon appears to the right */
+
+}
+
+    .contact-item p {
+        margin: 0; /* Remove default margins */
+        font-size: 1vw; /* Adjust text size as needed */
+        line-height: 1.5; /* Improve vertical alignment */
+    }
+
+.contact-item p {
+    margin: 0; /* Remove default margins */
+    font-size: 1vw; /* Adjust text size as needed */
+}
+
+/* Style for email and phone links */
+p a {
+    color: white; /* Set the text color to white */
+    text-decoration: none; /* Remove underline from links */
+}
+
+    p a:hover {
+        color: lightgray; /* Optional: Change color on hover */
+        text-decoration: underline; /* Optional: Add underline on hover */
+    }
+
+
+.contact-icon {
+    width: 1.2vw; /* Smaller icon size on smaller screens */
+    height: auto;
+    margin-top: 1vw;
+}
+
+    .contact-item p {
+        font-size: 0.9vw; /* Smaller text size on smaller screens */
+    }
+
+
+
+.footer-icon {
+    width: 24px; /* Set a default size for the icons */
+    height: 24px; /* Set a default size for the icons */
+    object-fit: contain; /* Ensure the icons fit within their container */
+    margin-top:5%;
+    margin-left:8%;
+}
+
+    .footer-icon {
+        width: 2vw; /* Smaller icon size on smaller screens */
+        height: auto;
+    }
+

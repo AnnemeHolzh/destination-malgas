@@ -1,0 +1,449 @@
+.section {
+    height: 100%; /* Adjust this to your desired height */
+    width: auto;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    position: relative;
+    align-items: center;
+}
+
+.slide-container {
+    padding-left: 2vw;
+    padding-top: 12vw;
+    justify-content: space-between;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+/* Visible state for slides */
+.visible {
+    opacity: 1;
+}
+
+#slide-svg,
+#slide-description,
+#slide-no {
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for fade effect */
+}
+
+.section1 {
+    background-image: url('/Assets/Landing/Img/DM_Offer_Bg.jpg'); /* Replace with your image path */
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* Full width of the container */
+    position: absolute;
+    bottom: 0vw; /* Adjust this as needed */
+}
+
+.circle-button {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    position: relative; /* Allows you to place the buttons at specific positions */
+    bottom: 2vw
+}
+.circle-button img {
+    width: 3vw;
+    height: auto;
+}
+
+/* Left button hover and active states */
+.left-button:hover img {
+    transform: scale(1.1);
+}
+
+.left-button:active img {
+    transform: scale(1.2);
+}
+
+/* Right button hover and active states */
+.right-button:hover img {
+    transform: scale(1.1);
+}
+
+.right-button:active img {
+    transform: scale(1.2);
+}
+
+#slide-svg {
+    width: 40vw;
+    height: auto;
+}
+
+@font-face {
+    font-family: 'TopDescription';
+    src: url('/Assets/Fonts/Montserrat-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.slide-description {
+    font-family: 'TopDescription', sans-serif;
+    font-size: 1.5vw; /* 20px */
+    color: white;
+    margin-top: 1vw;
+    word-wrap: break-word;
+    text-align: left;
+    line-height: 150%;
+    width: 40vw;
+}
+
+#slide-no {
+    width: 6.5vw; /* Adjust this value to your desired width */
+    height: auto; /* Maintains the aspect ratio */
+    position: relative; /* Position the slide number relative to its container */
+    top: 4vw; /* Adjust the positioning as needed */
+    left: 90vw; /* Adjust the positioning as needed */
+}
+
+#slide-line {
+    width: 30vw; /* Adjust this value to your desired width */
+    height: auto; /* Maintains the aspect ratio */
+    position: relative; /* Position the slide number relative to its container */
+    top: 3.4vw; /* Adjust the positioning as needed */
+    left: 50vw; /* Adjust the positioning as needed */
+}
+
+.carousel-container {
+    width: 40vw;
+    max-width: 900px;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    
+    justify-content: center;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
+}
+
+.carousel-image {
+    width: 20vw;
+    max-width: 300px;
+    margin-right: 1vw;
+    transition: transform 0.5s ease, width 0.5s ease, height 0.5s ease;
+}
+
+/* Contact Us Button Styles */
+.contact-button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    bottom: 1vw;
+    margin-left: 10vw;
+}
+
+    .contact-button img {
+        width: 15vw; /* Adjust as needed */
+        height: auto; /* Maintain aspect ratio */
+        transition: transform 0.3s ease;
+    }
+
+    /* Hover Effect */
+    .contact-button:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Active/Selected Effect */
+    .contact-button:active img {
+        transform: scale(1.2);
+    }
+
+/* Updated About Us Section */
+.section2 {
+    background-image: url('/Assets/Landing/Img/DM_AboutUs_Bg.jpg'); /* Replace with your image path */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 40px; /* Add padding if needed */
+}
+
+.aboutHeader img {
+    width: 100%;
+    max-width: 1200px; /* Adjust as needed */
+    margin-bottom: 20px; /* Adjust spacing */
+}
+
+.aboutContent {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px; /* Adjust as needed */
+}
+
+#about-image {
+    width: 50%; /* Adjust as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 2vw; /* Add spacing between image and text */
+    
+}
+
+#about-rectangle {
+    display: none; /* Hide the rectangle image if not needed */
+}
+
+.about-text {
+    max-width: 60%; /* Adjust as needed */
+    background: rgba(255, 255, 255, 0.25) !important; /* Add background to text for readability */
+    padding: 2vw; /* Add padding for spacing */
+    border-radius: 15px; /* Optional: Add rounded corners */
+    
+}
+
+    .about-text h2 {
+        margin-bottom: 0.8vw; /* Adjust spacing */
+        color: #fff; /* Adjust text color */
+        padding-top: 1vw;
+        padding-left: 1vw;
+        padding-right: 1vw;
+        font-family: AboutUsHeading;
+        font-size: 3vw; /* 35px */
+    }
+
+    .about-text p {
+        line-height: 1.8; /* Adjust this value as needed */
+        color: #fff; /* Adjust text color */
+        padding: 1vw;
+        font-family: AboutUsBody;
+        font-size: 0.9vw; /* 16px */
+    }
+
+/* General button styles */
+.about-button {
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    display: block;
+    margin-top: 4vw; /* Adjusted for responsiveness */
+    margin-left: 8vw; /* Adjusted for responsiveness */
+}
+
+    .about-button img {
+        width: 15vw; /* Adjusted for responsiveness */
+        height: auto; /* Maintain aspect ratio */
+        transition: transform 0.3s ease;
+    }
+
+    /* Hover Effect */
+    .about-button:hover img {
+        transform: scale(1.1);
+    }
+
+    /* Active/Selected Effect */
+    .about-button:active img {
+        transform: scale(1.2);
+    }
+
+@font-face {
+    font-family: 'AboutUsHeading';
+    src: url('/Assets/Fonts/Montserrat-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'AboutUsBody';
+    src: url('/Assets/Fonts/Montserrat-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.section3 {
+    background-image: url('/Assets/Landing/Img/DM_Visit_Background.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    padding: 2vw;
+}
+
+.visitHeader img {
+    width: 100%;
+    max-width: 1200px; /* Limits the width of the header image */
+    height: auto;
+    object-fit: contain; /* Ensures the image doesn't stretch */
+    margin-bottom: 2vw; /* Adds some space below the header */
+}
+
+#visit-image {
+    width: calc(66.67% - 2vw); /* Set image to 66.67% of the horizontal space minus the margin */
+    height: auto;
+}
+
+.visitContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Aligns text and image vertically */
+    width: 100%;
+}
+
+
+.visit-text {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 3vw;
+    border-radius: 15px;
+    text-align: left;
+    width: 33.33%; /* Set text to 33.33% of the horizontal space */
+    margin-right: 2vw; /* Space between text and image */
+}
+
+    .visit-text h2 {
+        margin-bottom: 10px;
+        color: #fff;
+        font-family: AboutUsHeading;
+        font-size: 2rem;
+    }
+
+    .visit-text p {
+        line-height: 1.8;
+        color: #fff;
+        font-family: AboutUsBody;
+        font-size: 1.25rem;
+    }
+
+
+#visit-image {
+    width: 50%; /* Adjust as needed */
+    height: auto;
+    flex: 1;
+}
+
+
+.popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+
+
+@media (max-width: 768px) {
+
+
+    .carousel-container,
+    #slide-no,
+    #slide-line {
+        display: none;
+    }
+    .section {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .slide-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2vw;
+        margin-bottom: 2vw;
+    }
+    #slide-svg {
+        width: 50%; 
+        margin-bottom: 1vw;
+    }
+    .slide-description {
+        font-size: 3vw; 
+        width: 80vw; 
+        margin-bottom: 2vw;
+        text-align: center; 
+
+}
+
+    .button-container {
+        position: absolute;
+        bottom: 20vw; /* Adjust this value to match the desired vertical position */
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 5vw; /* Add horizontal padding to move buttons closer to edges */
+    }
+
+    .circle-button {
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        position: static; /* Remove relative positioning */
+        padding: 24vw; /* Reduce padding to make click area smaller */
+        margin-left: 8vw; /* Sets the left margin to 20 pixels */
+        margin-right: 8vw;
+    }
+
+        .circle-button img {
+            width: 10vw;
+            height: auto;
+        }
+
+    .contact-button {
+        margin: 0; 
+    }
+        .contact-button img {
+            width: 25vw; 
+}
+
+    .visitContent {
+        flex-direction: column;
+        align-items: center;
+        height: 100%;
+    }
+
+    .section3 .visitContent #reasonImage {
+        width: 70%; /* Or whatever value you need */
+        height: auto;
+    }
+
+    .visit-text {
+        width: 80%; /* Set text to 33.33% of the horizontal space */
+        margin-bottom: 2vw;
+        padding: 1.5vw;
+    }
+
+        .visit-text h2 {
+            margin-bottom: 10px;
+            color: #fff;
+            font-family: AboutUsHeading;
+            font-size: 1rem;
+        }
+
+        .visit-text p {
+            line-height: 1;
+            color: #fff;
+            font-family: AboutUsBody;
+            font-size: 0.6rem;
+        }
+
+    .about-button {
+        margin-top: 8vw; /* Adjust as needed */
+        margin-left: 5vw; /* Adjust as needed */
+    }
+
+        .about-button img {
+            width: 35vw; /* Increase width for smaller screens */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+}
