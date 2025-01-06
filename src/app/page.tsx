@@ -24,6 +24,7 @@ import CarouselImage5 from '../app/Assets/Landing/Img/Carousel/carousel_img5.png
 import CarouselImage6 from '../app/Assets/Landing/Img/Carousel/carousel_img6.png';
 import CarouselImage7 from '../app/Assets/Landing/Img/Carousel/carousel_img7.png';
 
+
 const LandingPage: React.FC = () => {
     const [currentReason, setCurrentReason] = useState(0);
     const reasons = [
