@@ -8,7 +8,6 @@ import { createUser, generateUserId } from "./services/userService";
 import { createAmenity, generateAmenityId } from "./services/amenityService";
 
 export default function Home() {
-}
   return (
     <>
       <HeroCarouselWrapper />
