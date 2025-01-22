@@ -1,4 +1,4 @@
-export interface House {
+interface House {
     houseId: string;
     name: string;
     capacity: {
@@ -14,7 +14,6 @@ export interface House {
     };
     amenities: Record<string, boolean>;
     active: boolean;
-    hidden: boolean;
     createdAt: number;
     updatedAt: number;
   }
