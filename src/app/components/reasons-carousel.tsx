@@ -6,40 +6,58 @@ import Image from "next/image"
 import bg from "../../../public/Images/Landing/Section3/bg.jpg"
 import NavButton from "./NavButton"
 
+import slide1 from "../../../public/Images/Landing/Section3/carousel/slide1.png"
+import slide2 from "../../../public/Images/Landing/Section3/carousel/slide2.png"
+import slide3 from "../../../public/Images/Landing/Section3/carousel/slide3.png"
+import slide4 from "../../../public/Images/Landing/Section3/carousel/slide4.png"
+import slide5 from "../../../public/Images/Landing/Section3/carousel/slide5.png"
+import slide6 from "../../../public/Images/Landing/Section3/carousel/slide6.png"
+
+
 const reasons = [
   {
     number: 1,
     title: "Stunning Scenery",
-    description:
-      "Immerse yourself in the breath taking landscapes that surround you. From lush riverbanks to rolling hills, every view is a postcard moment.",
-    bgColor: "bg-green-400",
-    images: [
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-    ],
+    description1:
+      "Immerse yourself in the breathtaking landscapes that surround you.",
+    description2:
+      "From lush riverbanks to rolling hills, every view is a postcard moment.",
+    image: slide1,
   },
   {
     number: 2,
-    title: "Rich History",
-    description: "Discover the fascinating heritage and stories that make Malgas unique.",
-    bgColor: "bg-blue-400",
-    images: [
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-    ],
+    title: "Hiking Trails ",
+    description1: "Explore numerous hiking trails that cater to all levels of fitness.",
+    description2: "Discover the diverse flora and fauna, and perhaps spot some local wildlife.",
+    image: slide2,
   },
   {
     number: 3,
-    title: "Water Activities",
-    description: "Experience the thrill of various water sports and activities on our beautiful river.",
-    bgColor: "bg-amber-400",
-    images: [
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-      "/placeholder.svg?height=400&width=300",
-    ],
+    title: "Whale Watching",
+    description1: "Visit during whale season to witness the magnificent spectacle of these gentle giants.",
+    description2: "Infanta and Witsand are renowned for their whale watching opportunities.",
+    image: slide3,
+  },
+  {
+    number: 4,
+    title: "Fishing",
+    description1: "The Breede River is teeming with fish like Cob and Garrick.",
+    description2: "Whether you're a seasoned angler or a beginner, you'll find great spots for fishing.",
+    image: slide4,
+  },
+  {
+    number: 5,
+    title: "Bird Watching",
+    description1: "With a rich variety of bird species, including fish eagles and kingfishers, Malgas is a haven for bird watchers.",
+    description2: "",
+    image: slide5,
+  },
+  {
+    number: 6,
+    title: "Local Attractions",
+    description1: "Explore historical monuments, visit local pubs and restaurants, and tour nearby wineries.",
+    description2: "There's always something new to discover.",
+    image: slide6,
   },
 ]
 
@@ -66,47 +84,37 @@ export function ReasonsCarousel() {
           6 Reasons why you should visit <span className="font-custom1 inline-block mx-2 text-8xl ml-6 mt-3">Malgas</span>
         </h2>
 
-        <p className="text-gray-300 mb-12 max-w-2xl">
-          Malgas is more than just a place to stay—it's a destination filled with natural beauty and a variety of
-          activities.
+        
+
+        <div className="mx-4 md:mx-16">
+        <p className="text-white mb-6 max-w-2xl text-left text-2xl text-custom3">
+          Malgas is more than just a place to stay—it's a destination filled with natural beauty and a variety of activities.
         </p>
-
-        <div className="grid md:grid-cols-2 gap-12">
-          <div className="bg-black/50 backdrop-blur-sm p-8 rounded-lg">
-            <h3 className="text-3xl font-bold text-white mb-4">
-              {currentReason.number}. {currentReason.title}
-            </h3>
-            <p className="text-gray-300 mb-8">{currentReason.description}</p>
-
-            
-          </div>
-
-          <div className="relative h-[400px]">
-            <div className="absolute w-full h-full" style={{ perspective: "1000px" }}>
-              {currentReason.images.map((image, index) => (
-                <div
-                  key={index}
-                  className="absolute right-0 w-64 h-64 transition-all duration-500"
-                  style={{
-                    transform: `translateX(${index * 64}px) translateZ(${-index * 20}px)`,
-                    zIndex: currentReason.images.length - index,
-                  }}
-                >
-                  <Image
-                    src={image || "/placeholder.svg"}
-                    alt={`${currentReason.title} image ${index + 1}`}
-                    fill
-                    className="object-cover rounded-lg"
-                  />
-                </div>
-              ))}
+          <div className="grid md:grid-cols-2 gap-12">
+            <div className="bg-white/20 backdrop-blur-sm p-12 rounded-lg flex flex-col justify-between h-full mb-12">
+              <h3 className="text-5xl font-bold text-white mt-8">
+                {currentReason.number}. {currentReason.title}
+              </h3>
+              <div className="flex-grow flex flex-col justify-center">
+                <p className="text-white mb-4 text-2xl font-custom3 text-left">{currentReason.description1}</p>
+                <p className="text-white mb-4 text-2xl font-custom3 text-left">{currentReason.description2}</p>
+              </div>
             </div>
-            
+
+            <div className="relative h-[450px]">
+              <Image
+                src={currentReason.image}
+                alt={`${currentReason.title} image`}
+                fill
+                className="object-cover rounded-lg"
+              />
+            </div>
           </div>
-          <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
+        </div>
+
+        <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
           <NavButton direction="prev" onClick={prevSlide} />
           <NavButton direction="next" onClick={nextSlide} />
-        </div>
         </div>
       </div>
     </section>
