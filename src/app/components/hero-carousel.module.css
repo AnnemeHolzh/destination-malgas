@@ -30,3 +30,88 @@
     width: calc(100% / 3); /* Ensure 3 images are shown on larger screens */
   }
 }
+
+.hero-carousel-section {
+  transition: background-image 0.5s ease-in-out;
+}
+
+.contentContainer {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.contentContainer.animating {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.imageWrapper {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.imageWrapper.animating {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.numberIndicator {
+  opacity: 0.8;
+  transform: translateY(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.numberIndicator.animating {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Add fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add slide animations */
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Apply initial animations */
+.contentContainer {
+  animation: slideRight 0.5s ease-out;
+}
+
+.imageWrapper {
+  animation: slideLeft 0.5s ease-out;
+}
+
+.numberIndicator {
+  animation: fadeIn 0.5s ease-out;
+}

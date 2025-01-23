@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import bg from "../../../public/Images/Landing/Section3/bg.jpg"
 import NavButton from "./NavButton"
+import styles from "./reasons-carousel.module.css"
 
 import slide1 from "../../../public/Images/Landing/Section3/carousel/slide1.png"
 import slide2 from "../../../public/Images/Landing/Section3/carousel/slide2.png"
@@ -63,13 +64,26 @@ const reasons = [
 
 export function ReasonsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % reasons.length)
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % reasons.length)
+        setIsAnimating(false)
+      }, 500); // Match this with animation duration
+    }
   }
 
   const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + reasons.length) % reasons.length)
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev - 1 + reasons.length) % reasons.length)
+        setIsAnimating(false)
+      }, 500); // Match this with animation duration
+    }
   }
 
   const currentReason = reasons[currentIndex]
@@ -93,7 +107,7 @@ export function ReasonsCarousel() {
          
 
           <div className="md:hidden">
-            <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg mb-6">
+            <div className={`bg-white/20 backdrop-blur-sm p-6 rounded-lg mb-6 ${styles.carouselItem} ${isAnimating ? styles.animating : ''}`}>
               <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
                 {currentReason.number}. {currentReason.title}
               </h3>
@@ -113,7 +127,7 @@ export function ReasonsCarousel() {
           </div>
 
           <div className="hidden md:grid md:grid-cols-2 gap-12">
-            <div className="bg-white/20 backdrop-blur-sm p-12 rounded-lg flex flex-col justify-between h-full">
+            <div className={`bg-white/20 backdrop-blur-sm p-12 rounded-lg flex flex-col justify-between h-full ${styles.carouselItem} ${isAnimating ? styles.animating : ''}`}>
               <h3 className="text-4xl lg:text-5xl font-bold text-white mt-8">
                 {currentReason.number}. {currentReason.title}
               </h3>
@@ -123,7 +137,7 @@ export function ReasonsCarousel() {
               </div>
             </div>
 
-            <div className="relative h-[450px]">
+            <div className={`relative h-[450px] ${styles.imageContainer} ${isAnimating ? styles.animating : ''}`}>
               <Image
                 src={currentReason.image}
                 alt={`${currentReason.title} image`}

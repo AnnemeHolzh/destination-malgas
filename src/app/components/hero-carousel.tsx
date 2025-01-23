@@ -82,15 +82,28 @@ const images = [
 export function HeroCarousel() {
   const [mainIndex, setMainIndex] = useState(0)
   const [imageIndex, setImageIndex] = useState(0)
+  const [isAnimating, setIsAnimating] = useState(false)
 
   const nextSlide = () => {
-    setMainIndex((prev) => (prev + 1) % carouselItems.length)
-    setImageIndex((prev) => (prev + 1) % images.length)
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setMainIndex((prev) => (prev + 1) % carouselItems.length)
+        setImageIndex((prev) => (prev + 1) % images.length)
+        setIsAnimating(false)
+      }, 500)
+    }
   }
 
   const prevSlide = () => {
-    setMainIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length)
-    setImageIndex((prev) => (prev - 1 + images.length) % images.length)
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setTimeout(() => {
+        setMainIndex((prev) => (prev - 1 + carouselItems.length) % carouselItems.length)
+        setImageIndex((prev) => (prev - 1 + images.length) % images.length)
+        setIsAnimating(false)
+      }, 500)
+    }
   }
 
   const currentItem = carouselItems[mainIndex]
@@ -108,29 +121,29 @@ export function HeroCarousel() {
 
   return (
     <section
-      className="relative h-screen overflow-hidden"
+      className={`hero-carousel-section relative h-screen overflow-hidden`}
       style={{ backgroundImage: `url(${currentItem.bgImage.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className="relative h-full container mx-auto px-4 flex flex-col justify-center">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
-          <div className="flex-1 z-10 flex flex-col items-start w-full lg:w-auto">
+          <div className={`flex-1 z-10 flex flex-col items-start w-full lg:w-auto ${styles.contentContainer} ${isAnimating ? styles.animating : ''}`}>
             <h1 className={`${styles.title}`} style={{ fontSize: getTitleFontSize(currentItem.title), textAlign: window.innerWidth < 768 ? 'center' : 'left' }}>
               {currentItem.title}
             </h1>
             <p className="text-lg md:text-xl lg:text-2xl text-white max-w-xl mb-8 text-center md:text-left">
               {currentItem.description}
             </p>
-            <div className={` mt-4 ${window.innerWidth < 768 ? 'flex justify-center' : ''}`}>
+            <div className={`self-start mt-4 ${window.innerWidth < 768 ? 'flex justify-center' : ''}`}>
               <CustomButton text="Contact Us" />
             </div>
           </div>
 
-          <div className="hidden lg:flex flex-1 justify-end items-center overflow-hidden pr-0">
+          <div className={`hidden lg:flex flex-1 justify-end items-center overflow-hidden pr-0 ${styles.imageWrapper} ${isAnimating ? styles.animating : ''}`}>
             <ImageCarousel images={images} currentIndex={imageIndex} />
           </div>
         </div>
 
-        <h2 className="absolute bottom-20 md:bottom-8 right-4 md:right-8 text-4xl md:text-7xl text-white opacity-80">
+        <h2 className={`absolute bottom-20 md:bottom-8 right-4 md:right-8 text-4xl md:text-7xl text-white opacity-80 ${styles.numberIndicator} ${isAnimating ? styles.animating : ''}`}>
           {currentItem.number}
         </h2>
 

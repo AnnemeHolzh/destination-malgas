@@ -1,0 +1,66 @@
+.carouselItem {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.carouselItem.animating {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.imageContainer {
+  position: relative;
+  opacity: 1;
+  transform: scale(1);
+  transition: all 0.5s ease-in-out;
+}
+
+.imageContainer.animating {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* Add a fade-in animation for when items appear */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add slide animations for different directions */
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Apply animations to elements */
+.carouselItem {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.imageContainer img {
+  animation: slideRight 0.5s ease-out;
+} 
