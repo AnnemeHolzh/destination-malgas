@@ -1,6 +1,78 @@
+'use client';
+
 import Image from "next/image";
+import { createHouse, generateHouseId } from "./services/houseService";
+import { app } from "./Firebase/firebaseConfig";
+import { createUser, generateUserId } from "./services/userService";
+import { createAmenity, generateAmenityId } from "./services/amenityService";
 
 export default function Home() {
+  // Add this function to create a dummy house
+  async function handleAddDummyHouse() {
+    const dummyHouse = {
+      houseId: generateHouseId(),
+      name: "Test House",
+      capacity: {
+        adults: 4,
+        children: 2
+      },
+      beds: 3,
+      baths: 2,
+      description: "A test house created from the homepage",
+      media: {
+        photos: [],
+        videos: []
+      },
+      amenities: {
+        wifi: true,
+        parking: true
+      },
+      active: true,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    };
+
+    try {
+      await createHouse(dummyHouse);
+      console.log('Dummy house created successfully!');
+    } catch (error) {
+      console.error('Error creating dummy house:', error);
+    }
+  }
+
+  // Add this function inside the Home component
+  async function handleAddDummyUser() {
+    const dummyUser = {
+      uid: generateUserId(),
+      email: `user${Date.now()}@example.com`,
+      name: "Test User",
+      role: "user" as const,
+      createdAt: Date.now()
+    };
+
+    try {
+      await createUser(dummyUser);
+      console.log('Dummy user created successfully!');
+    } catch (error) {
+      console.error('Error creating dummy user:', error);
+    }
+  }
+
+  async function handleAddDummyAmenity() {
+    const dummyAmenity = {
+      amenityId: generateAmenityId(),
+      name: "Test Amenity",
+      createdAt: Date.now()
+    };
+
+    try {
+      await createAmenity(dummyAmenity);
+      console.log('Dummy amenity created successfully!');
+    } catch (error) {
+      console.error('Error creating dummy amenity:', error);
+    }
+  }
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
@@ -48,6 +120,27 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+
+        <button
+          onClick={handleAddDummyHouse}
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Add Dummy House
+        </button>
+
+        <button
+          onClick={handleAddDummyUser}
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Add Dummy User
+        </button>
+
+        <button
+          onClick={handleAddDummyAmenity}
+          className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
+        >
+          Add Dummy Amenity
+        </button>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

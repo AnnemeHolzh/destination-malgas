@@ -1,4 +1,4 @@
-interface House {
+ export interface House {
     houseId: string;
     name: string;
     capacity: {
