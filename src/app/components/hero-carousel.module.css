@@ -14,3 +14,8 @@
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow */
   max-width: 50%;
 }
+
+.carousel-image {
+  width: calc(320px * 2.5); /* Adjust based on your image size */
+  height: auto; /* Maintain aspect ratio */
+}

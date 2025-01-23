@@ -8,13 +8,13 @@ import CustomButton from "./button"
 import NavButton from "./NavButton"
 import ImageCarousel from "./ImageCarousel"
 
-import section1_slide1 from "../../../public/Images/Landing/Section1/slide1.jpg"
-import section1_slide2 from "../../../public/Images/Landing/Section1/slide2.jpg"
-import section1_slide3 from "../../../public/Images/Landing/Section1/slide3.jpg"
-import section1_slide4 from "../../../public/Images/Landing/Section1/slide4.jpg"
-import section1_slide5 from "../../../public/Images/Landing/Section1/slide5.jpg"
-import section1_slide6 from "../../../public/Images/Landing/Section1/slide6.jpg"
-import section1_slide7 from "../../../public/Images/Landing/Section1/slide7.jpg"
+import slide1 from "../../../public/Images/Landing/Section1/slide1.jpg"
+import slide2 from "../../../public/Images/Landing/Section1/slide2.jpg"
+import slide3 from "../../../public/Images/Landing/Section1/slide3.jpg"
+import slide4 from "../../../public/Images/Landing/Section1/slide4.jpg"
+import slide5 from "../../../public/Images/Landing/Section1/slide5.jpg"
+import slide6 from "../../../public/Images/Landing/Section1/slide6.jpg"
+import slide7 from "../../../public/Images/Landing/Section1/slide7.jpg"
 
 import c_slide1 from "../../../public/Images/Landing/Section1/carousel/carousel_img1.png"
 import c_slide2 from "../../../public/Images/Landing/Section1/carousel/carousel_img2.png"
@@ -29,54 +29,54 @@ const carouselItems = [
     title: "Destination Malgas",
     description: "Get to know us! We aim to provide a comprehensive service to ensure your stay is memorable.",
     number: "01",
-    bgImage: section1_slide1,
+    bgImage: slide1,
   },
   {
     title: "Accommodation Booking",
     description: "Choose from our variety of houses, cottages, and houseboats.",
     number: "02",
-    bgImage: section1_slide2,
+    bgImage: slide2,
   },
   {
     title: "Boating",
     description: "Take advantage of our private jetties and explore the Breede River, offering boat charters and boat rentals.",
     number: "03",
-    bgImage: section1_slide3,
+    bgImage: slide3,
   },
   {
     title: "Local Service Providers",
     description: "Supporting our local service providers, contact us for assistance or let us do the marketing for you.",
     number: "04",
-    bgImage: section1_slide4,
+    bgImage: slide4,
   },
   {
     title: "Bait and Tackle",
     description: "Stock up on everything you need for a successful fishing trip.",
     number: "05",
-    bgImage: section1_slide5,
+    bgImage: slide5,
   },
   {
     title: "Dining Options",
     description: "Visit The Boathouse Pub and Pizza for a delightful meal or choose from a variety of other options.",
     number: "06",
-    bgImage: section1_slide6,
+    bgImage: slide6,
   },
   {
     title: "Information Hub",
     description: "Our hub provides all the information you need about local attractions and activities, office and shop.",
     number: "07",
-    bgImage: section1_slide7,
+    bgImage: slide7,
   },
 ]
 
 const images = [
-  c_slide1,
   c_slide2,
   c_slide3,
   c_slide4,
   c_slide5,
   c_slide6,
   c_slide7,
+  c_slide1,
 ]
 
 export function HeroCarousel() {
@@ -124,12 +124,12 @@ export function HeroCarousel() {
           </div>
 
           {/* Image Carousel on the right side */}
-          <div className="flex-1 flex justify-center items-center">
+          <div className="flex-1 flex justify-end items-center overflow-hidden pr-0">
             <ImageCarousel images={images} currentIndex={imageIndex} />
           </div>
         </div>
 
-        <h2 className="absolute bottom-8 right-8 text-8xl text-white">{currentItem.number}</h2>
+        <h2 className="absolute bottom-8 right-8 text-7xl text-white">{currentItem.number}</h2>
 
         {/* Centering the Nav Buttons with spacing */}
         <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
