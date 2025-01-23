@@ -9,7 +9,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 py-24">
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="h-[1px] bg-white flex-1 max-w-[600px]"></div>
-          <h1 className="text-6xl md:text-7xl font-script text-white">About Us</h1>
+          <h1 className="text-6xl md:text-7xl font-script text-white text-shadow">About Us</h1>
           <div className="h-[1px] bg-white flex-1 max-w-[600px]"></div>
         </div>
 

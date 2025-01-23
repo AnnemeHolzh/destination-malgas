@@ -12,6 +12,12 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        custom1: ['FeelingPassionate', 'cursive'],
+        custom2: ['GlossAndBloom', 'sans-serif'],
+        custom3: ['Montserrat-Regular', 'sans-serif'],
+        custom4: ['Montserrat-ExtraBold', 'sans-serif'],
+      },
     },
   },
   plugins: [],

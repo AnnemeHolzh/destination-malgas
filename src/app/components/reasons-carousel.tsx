@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
+import bg from "../../../public/Images/Landing/Section3/bg.jpg"
+import NavButton from "./NavButton"
 
 const reasons = [
   {
@@ -55,10 +57,13 @@ export function ReasonsCarousel() {
   const currentReason = reasons[currentIndex]
 
   return (
-    <section className="relative min-h-screen bg-gray-800">
+    <section
+      className="relative min-h-screen"
+      style={{ backgroundImage: `url(${bg.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
       <div className="container mx-auto px-4 py-24">
-        <h2 className="text-5xl md:text-7xl font-script text-white mb-16">
-          6 Reasons why you should visit <span className="inline-block">Malgas</span>
+        <h2 className="text-5xl md:text-6xl font-custom4 text-white mb-16 flex justify-center items-center text-shadow">
+          6 Reasons why you should visit <span className="font-custom1 inline-block mx-2 text-8xl ml-6 mt-3">Malgas</span>
         </h2>
 
         <p className="text-gray-300 mb-12 max-w-2xl">
@@ -73,14 +78,7 @@ export function ReasonsCarousel() {
             </h3>
             <p className="text-gray-300 mb-8">{currentReason.description}</p>
 
-            <div className="flex space-x-4">
-              <button onClick={prevSlide} className="text-white hover:bg-white/20">
-                <ChevronLeft className="w-8 h-8" />
-              </button>
-              <button onClick={nextSlide} className="text-white hover:bg-white/20">
-                <ChevronRight className="w-8 h-8" />
-              </button>
-            </div>
+            
           </div>
 
           <div className="relative h-[400px]">
@@ -103,7 +101,12 @@ export function ReasonsCarousel() {
                 </div>
               ))}
             </div>
+            
           </div>
+          <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
+          <NavButton direction="prev" onClick={prevSlide} />
+          <NavButton direction="next" onClick={nextSlide} />
+        </div>
         </div>
       </div>
     </section>
