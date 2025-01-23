@@ -95,15 +95,15 @@ export function HeroCarousel() {
 
   const currentItem = carouselItems[mainIndex]
 
-  // Function to determine font size based on title length
   const getTitleFontSize = (title: string) => {
+    const baseSize = window.innerWidth < 768 ? '4rem' : 'clamp(5rem, 8vw, 9rem)'; // Adjust base size for mobile
     const charCount = title.length;
-    if (charCount > 25) {
-      return '6rem'; // Smaller size for long titles
-    } else if (charCount > 20) {
-      return '7rem'; // Medium size for medium-length titles
+
+    // Adjust font size based on character count
+    if (charCount > 20) {
+      return `calc(${baseSize} - 0.5rem)`; // Decrease size for longer titles
     }
-    return '9rem'; // Default size for short titles
+    return baseSize;
   };
 
   return (
@@ -113,26 +113,28 @@ export function HeroCarousel() {
     >
       <div className="relative h-full container mx-auto px-4 flex flex-col justify-center">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-12">
-          <div className="flex-1 z-10 flex flex-col items-start">
-            <h1 className={styles.title} style={{ fontSize: getTitleFontSize(currentItem.title) }}>
+          <div className="flex-1 z-10 flex flex-col items-start w-full lg:w-auto">
+            <h1 className={`${styles.title}`} style={{ fontSize: getTitleFontSize(currentItem.title), textAlign: window.innerWidth < 768 ? 'center' : 'left' }}>
               {currentItem.title}
             </h1>
-            <p className="text-2xl text-white max-w-xl mb-8">{currentItem.description}</p>
-            <div className="self-start mt-4">
+            <p className="text-lg md:text-xl lg:text-2xl text-white max-w-xl mb-8 text-center md:text-left">
+              {currentItem.description}
+            </p>
+            <div className={` mt-4 ${window.innerWidth < 768 ? 'flex justify-center' : ''}`}>
               <CustomButton text="Contact Us" />
             </div>
           </div>
 
-          {/* Image Carousel on the right side */}
-          <div className="flex-1 flex justify-end items-center overflow-hidden pr-0">
+          <div className="hidden lg:flex flex-1 justify-end items-center overflow-hidden pr-0">
             <ImageCarousel images={images} currentIndex={imageIndex} />
           </div>
         </div>
 
-        <h2 className="absolute bottom-8 right-8 text-7xl text-white">{currentItem.number}</h2>
+        <h2 className="absolute bottom-20 md:bottom-8 right-4 md:right-8 text-4xl md:text-7xl text-white opacity-80">
+          {currentItem.number}
+        </h2>
 
-        {/* Centering the Nav Buttons with spacing */}
-        <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
+        <div className="flex justify-center absolute bottom-4 md:bottom-8 left-0 right-0 space-x-4">
           <NavButton direction="prev" onClick={prevSlide} />
           <NavButton direction="next" onClick={nextSlide} />
         </div>
