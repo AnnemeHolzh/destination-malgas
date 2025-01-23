@@ -56,7 +56,7 @@ const reasons = [
     number: 6,
     title: "Local Attractions",
     description1: "Explore historical monuments, visit local pubs and restaurants, and tour nearby wineries.",
-    description2: "There's always something new to discover.",
+    description2: "There's always something new to discover.",
     image: slide6,
   },
 ]
@@ -76,28 +76,50 @@ export function ReasonsCarousel() {
 
   return (
     <section
-      className="relative min-h-screen"
+      className="relative min-h-screen py-12 md:py-24"
       style={{ backgroundImage: `url(${bg.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
-      <div className="container mx-auto px-4 py-24">
-        <h2 className="text-5xl md:text-6xl font-custom4 text-white mb-16 flex justify-center items-center text-shadow">
-          6 Reasons why you should visit <span className="font-custom1 inline-block mx-2 text-8xl ml-6 mt-3">Malgas</span>
+      <div className="container mx-auto px-4">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-custom4 text-white mb-8 md:mb-16 text-center text-shadow">
+          6 Reasons why you should visit{" "}
+          <span className="font-custom1 block md:inline-block mx-2 text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-2 md:mt-3">
+            Malgas
+          </span>
         </h2>
+        <p className="text-white mb-6  mx-auto text-center md:text-center text-lg md:text-xl lg:text-2xl font-custom3">
+            Malgas is more than just a place to stay—it's a destination filled with natural beauty and a variety of activities.
+          </p>
+        <div className="mx-2 sm:mx-4 md:mx-16">
+         
 
-        
+          <div className="md:hidden">
+            <div className="bg-white/20 backdrop-blur-sm p-6 rounded-lg mb-6">
+              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+                {currentReason.number}. {currentReason.title}
+              </h3>
+              <div className="mb-6">
+                <p className="text-white mb-3 text-lg font-custom3">{currentReason.description1}</p>
+                <p className="text-white text-lg font-custom3">{currentReason.description2}</p>
+              </div>
+              <div className="relative h-[250px] w-full">
+                <Image
+                  src={currentReason.image}
+                  alt={`${currentReason.title} image`}
+                  fill
+                  className="object-cover rounded-lg"
+                />
+              </div>
+            </div>
+          </div>
 
-        <div className="mx-4 md:mx-16">
-        <p className="text-white mb-6 max-w-2xl text-left text-2xl text-custom3">
-          Malgas is more than just a place to stay—it's a destination filled with natural beauty and a variety of activities.
-        </p>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="bg-white/20 backdrop-blur-sm p-12 rounded-lg flex flex-col justify-between h-full mb-12">
-              <h3 className="text-5xl font-bold text-white mt-8">
+          <div className="hidden md:grid md:grid-cols-2 gap-12">
+            <div className="bg-white/20 backdrop-blur-sm p-12 rounded-lg flex flex-col justify-between h-full">
+              <h3 className="text-4xl lg:text-5xl font-bold text-white mt-8">
                 {currentReason.number}. {currentReason.title}
               </h3>
               <div className="flex-grow flex flex-col justify-center">
-                <p className="text-white mb-4 text-2xl font-custom3 text-left">{currentReason.description1}</p>
-                <p className="text-white mb-4 text-2xl font-custom3 text-left">{currentReason.description2}</p>
+                <p className="text-white mb-4 text-xl lg:text-2xl font-custom3">{currentReason.description1}</p>
+                <p className="text-white mb-4 text-xl lg:text-2xl font-custom3">{currentReason.description2}</p>
               </div>
             </div>
 
@@ -112,7 +134,7 @@ export function ReasonsCarousel() {
           </div>
         </div>
 
-        <div className="flex justify-center absolute bottom-8 left-0 right-0 space-x-4">
+        <div className="flex justify-center mt-8 md:mt-0 md:absolute md:bottom-8 md:left-0 md:right-0 space-x-4">
           <NavButton direction="prev" onClick={prevSlide} />
           <NavButton direction="next" onClick={nextSlide} />
         </div>

@@ -20,6 +20,13 @@
 }
 
 .carousel-image {
-  width: calc(320px * 2.5); /* Adjust based on your image size */
+  width: calc(100% / 3); /* Show 3 images at a time */
   height: auto; /* Maintain aspect ratio */
+}
+
+/* Add any additional styles for larger screens if necessary */
+@media (min-width: 1024px) {
+  .carousel-image {
+    width: calc(100% / 3); /* Ensure 3 images are shown on larger screens */
+  }
 }

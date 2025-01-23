@@ -4,8 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import { StaticImageData } from 'next/image';
 import './hero-carousel.module.css';
+
 interface ImageCarouselProps {
-  images: StaticImageData[]; // Change to StaticImageData[]
+  images: StaticImageData[];
   currentIndex: number;
 }
 
@@ -14,7 +15,7 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, currentIndex }) =
   const displayImages = [...images, ...images]; // Duplicate images for endless effect
 
   return (
-    <div className="flex overflow-hidden relative w-[800px] justify-center">
+    <div className="flex overflow-hidden relative w-full justify-center">
       {displayImages.map((image, index) => (
         <div
           key={index}
