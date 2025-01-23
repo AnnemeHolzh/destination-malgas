@@ -1,0 +1,16 @@
+
+
+.container {
+  padding: 20px;
+  background-color: #f0f0f0;
+}
+
+.title {
+  font-size: 9rem; /* This corresponds to text-6xl */
+  color: white; /* This corresponds to text-white */
+  margin-bottom: 1.5rem; /* This corresponds to mb-6 */
+  line-height: 90%;
+  margin-top: 6rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow */
+  max-width: 50%;
+}

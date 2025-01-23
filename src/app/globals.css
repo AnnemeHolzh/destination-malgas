@@ -2,13 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  .font-script {
-    font-family: var(--font-script);
-  }
+@font-face {
+  font-family: 'FeelingPassionate';
+  src: url('../../public/fonts/FeelingPassionate.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
-:root {
-  --font-script: "Dancing Script", cursive;
+@font-face {
+  font-family: Montserrat;
+  src: url('../../public/fonts/Montserrat-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
+
+
+@font-face {
+  font-family: 'GlossAndBloom';
+  src: url('../../public/fonts/Gloss_And_Bloom.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Set the font for all h1 headings */
+h1 {
+  font-family: 'FeelingPassionate', cursive; /* Ensure to include a fallback font */
+}
+
+h2 {
+  font-family: 'GlossAndBloom', sans-serif;
+}
+
+p {
+  font-family: 'Montserrat', sans-serif;
+}
+
+
+
 
