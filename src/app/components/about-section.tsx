@@ -13,7 +13,7 @@ export function AboutSection() {
           <div className="h-[1px] bg-white flex-1 max-w-[600px]"></div>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-2 items-center max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-center max-w-6xl mx-auto gap-8">
           <div className="rounded-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
             <Image 
               src={aboutImage}
@@ -25,7 +25,7 @@ export function AboutSection() {
             />
           </div>
 
-          <div className="bg-white/20 backdrop-blur-sm p-8 rounded-lg max-w-lg mt-8">
+          <div className="bg-white/20 backdrop-blur-sm p-8 rounded-lg max-w-lg">
             <h3 className="text-3xl font-bold text-white mb-4">Get to know us!</h3>
             <p className="text-xl text-gray-300 mb-8">
               Our mission is to provide a comprehensive umbrella of services designed to enhance your experience,
