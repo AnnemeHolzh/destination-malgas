@@ -18,16 +18,23 @@ const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, currentIndex }) =
       {displayImages.map((image, index) => (
         <div
           key={index}
-          className={`transition-transform duration-300 ease-in-out min-w-[320px] flex justify-center`}
+          className={`transition-all duration-500 ease-out min-w-[320px] flex justify-center
+            hover:scale-105 transform-gpu`}
           style={{
-            transform: `translateX(-${(currentIndex * 320)}px)`, // Adjusted for endless effect
+            transform: `translateX(-${(currentIndex * 320)}px)`,
+            opacity: '0.9',
+            transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         >
           <Image 
             src={image} 
             alt={`Carousel image ${index + 1}`} 
-            className="carousel-image object-contain rounded-lg"
-            style={{ borderRadius: '20px' }}
+            className="carousel-image object-contain rounded-lg
+              transition-transform duration-500 hover:shadow-2xl"
+            style={{ 
+              borderRadius: '20px',
+              transform: `scale(${index === currentIndex ? 1.1 : 1})`,
+            }}
             width={320}
             height={240}
             priority={index === currentIndex}
