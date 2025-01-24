@@ -13,6 +13,7 @@ export default {
         foreground: "var(--foreground)",
       },
       fontFamily: {
+        inter: ['Inter', 'sans-serif'],
         custom1: ['FeelingPassionate', 'cursive'],
         custom2: ['GlossAndBloom', 'sans-serif'],
         custom3: ['Montserrat-Regular', 'sans-serif'],

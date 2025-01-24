@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import Image from "next/image"
+import { useEffect, useState } from "react"
 import styles from "./hero-carousel.module.css"
 import CustomButton from "./ui/button"
 import NavButton from "./NavButton"
@@ -83,6 +81,11 @@ export function HeroCarousel() {
   const [mainIndex, setMainIndex] = useState(0)
   const [imageIndex, setImageIndex] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
 
   const nextSlide = () => {
     if (!isAnimating) {
@@ -118,6 +121,10 @@ export function HeroCarousel() {
     }
     return baseSize;
   };
+
+  if (!isMounted) {
+    return null // or loading placeholder
+  }
 
   return (
     <section
