@@ -69,20 +69,16 @@ export function ReasonsCarousel() {
   const nextSlide = () => {
     if (!isAnimating) {
       setIsAnimating(true)
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev + 1) % reasons.length)
-        setIsAnimating(false)
-      }, 500); // Match this with animation duration
+      setCurrentIndex((prev) => (prev + 1) % reasons.length)
+      setTimeout(() => setIsAnimating(false), 500) // Match this with animation duration
     }
   }
 
   const prevSlide = () => {
     if (!isAnimating) {
       setIsAnimating(true)
-      setTimeout(() => {
-        setCurrentIndex((prev) => (prev - 1 + reasons.length) % reasons.length)
-        setIsAnimating(false)
-      }, 500); // Match this with animation duration
+      setCurrentIndex((prev) => (prev - 1 + reasons.length) % reasons.length)
+      setTimeout(() => setIsAnimating(false), 500) // Match this with animation duration
     }
   }
 
@@ -90,11 +86,11 @@ export function ReasonsCarousel() {
 
   return (
     <section
-      className="relative min-h-screen py-12 md:py-24"
+      className="relative min-h-screen py-8 md:py-16"
       style={{ backgroundImage: `url(${bg.src})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-custom4 text-white mb-8 md:mb-16 text-center text-shadow">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-custom4 text-white mb-6 md:mb-12 text-center text-shadow">
           6 Reasons why you should visit{" "}
           <span className="font-custom1 block md:inline-block mx-2 text-5xl sm:text-6xl md:text-7xl lg:text-8xl mt-2 md:mt-3">
             Malgas

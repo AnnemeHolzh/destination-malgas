@@ -1,0 +1,9 @@
+.logoTransition {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.logoContainer {
+  position: relative;
+  width: 64px;
+  height: 64px;
+} 
