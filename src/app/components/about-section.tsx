@@ -1,6 +1,6 @@
 import Image from "next/image"
 import aboutImage from "../../../public/Images/Landing/Section2/image.png"
-import CustomButton from "./button"
+import CustomButton from "./ui/button"
 import styles from './about-section.module.css'
 
 export function AboutSection() {

@@ -1,10 +1,12 @@
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
 import Image from "next/image"
 import logo from "../../../public/Images/Layout/footer_logo.svg" // Make sure to add your logo image to this path
+import NewsletterForm from "./newsletter-form"
 
 export function Footer() {
   return (
-    <footer className="bg-black text-white py-12">
+    <footer className="bg-[#202020] text-white py-12">
+      <NewsletterForm/>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
