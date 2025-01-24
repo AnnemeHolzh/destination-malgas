@@ -9,7 +9,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 py-24">
         <div className="flex items-center justify-center gap-4 mb-12">
           <div className="h-[1px] bg-white flex-1 max-w-[600px]"></div>
-          <h1 className="text-6xl md:text-7xl font-script text-white">About Us</h1>
+          <h1 className="text-7xl md:text-8xl font-script text-white text-shadow">About Us</h1>
           <div className="h-[1px] bg-white flex-1 max-w-[600px]"></div>
         </div>
 
@@ -26,7 +26,7 @@ export function AboutSection() {
           </div>
 
           <div className="bg-white/20 backdrop-blur-sm p-8 rounded-lg max-w-lg">
-            <h3 className="text-3xl font-bold text-white mb-4">Get to know us!</h3>
+            <h3 className="text-4xl font-bold text-white mb-4">Get to know us!</h3>
             <p className="text-xl text-gray-300 mb-8">
               Our mission is to provide a comprehensive umbrella of services designed to enhance your experience,
               whether you're here for boating, accommodation, business, tourism, or events. Explore the best of Malgas

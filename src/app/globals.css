@@ -10,12 +10,18 @@
 }
 
 @font-face {
-  font-family: Montserrat;
+  font-family: 'Montserrat-Regular';
   src: url('../../public/fonts/Montserrat-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Montserrat-ExtraBold';
+  src: url('../../public/fonts/Montserrat-ExtraBold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @font-face {
   font-family: 'GlossAndBloom';
@@ -37,7 +43,9 @@ p {
   font-family: 'Montserrat', sans-serif;
 }
 
-
+.text-shadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 
 
 

@@ -1,21 +1,117 @@
-
-
 .container {
   padding: 20px;
   background-color: #f0f0f0;
 }
 
 .title {
-  font-size: 9rem; /* This corresponds to text-6xl */
+  font-size: clamp(3rem, 8vw, 9rem); /* Responsive font sizing */
   color: white; /* This corresponds to text-white */
   margin-bottom: 1.5rem; /* This corresponds to mb-6 */
   line-height: 90%;
-  margin-top: 6rem;
+  margin-top: 2rem;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Add drop shadow */
-  max-width: 50%;
+  max-width: 100%; /* Full width on mobile */
+  
+  /* Adjust max-width for larger screens */
+  @media (min-width: 1024px) {
+    margin-top: 6rem;
+    max-width: 50%;
+  }
 }
 
 .carousel-image {
-  width: calc(320px * 2.5); /* Adjust based on your image size */
+  width: calc(100% / 3); /* Show 3 images at a time */
   height: auto; /* Maintain aspect ratio */
+}
+
+/* Add any additional styles for larger screens if necessary */
+@media (min-width: 1024px) {
+  .carousel-image {
+    width: calc(100% / 3); /* Ensure 3 images are shown on larger screens */
+  }
+}
+
+.hero-carousel-section {
+  transition: background-image 0.5s ease-in-out;
+}
+
+.contentContainer {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.contentContainer.animating {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.imageWrapper {
+  opacity: 1;
+  transform: translateX(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.imageWrapper.animating {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.numberIndicator {
+  opacity: 0.8;
+  transform: translateY(0);
+  transition: all 0.5s ease-in-out;
+}
+
+.numberIndicator.animating {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Add fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Add slide animations */
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideLeft {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Apply initial animations */
+.contentContainer {
+  animation: slideRight 0.5s ease-out;
+}
+
+.imageWrapper {
+  animation: slideLeft 0.5s ease-out;
+}
+
+.numberIndicator {
+  animation: fadeIn 0.5s ease-out;
 }
