@@ -1,10 +1,7 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import "./globals.css"
-import { Navigation } from "./components/navigation"
 import { Footer } from "./components/footer"
-
-const inter = Inter({ subsets: ["latin"] })
+import { NavigationWrapper } from "./components/client-wrappers/navigation-wrapper"
 
 export const metadata: Metadata = {
   title: "Destination Malgas",
@@ -17,13 +14,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Navigation />
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <NavigationWrapper />
         <main>{children}</main>
         <Footer />
       </body>
     </html>
   )
 }
-

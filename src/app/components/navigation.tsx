@@ -6,6 +6,7 @@ import { User, Menu, X } from "lucide-react"
 import Image from "next/image"
 import logoBlack from "../../../public/Images/Layout/logoBlackTransparent.svg" // Update with your actual paths
 import logoWhite from "../../../public/Images/Layout/logoWhiteTransparent.svg" // Update with your actual paths
+import { useWindowUtils } from '../hooks/useWindowUtils'
 
 export function Navigation() {
   const [isVisible, setIsVisible] = useState(true)
@@ -14,26 +15,20 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [useDarkLogo, setUseDarkLogo] = useState(true)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
 
   useEffect(() => {
-    // Only run this code on the client side
-    if (typeof window === 'undefined') return;
+    if (!isMounted) return
 
     const checkBackground = () => {
-      // Get the pixel at the logo's position
       const element = document.elementFromPoint(100, 50)
       if (!element) return
 
-      // Get the background color
-      const bgcolor = window.getComputedStyle(element).backgroundColor
-      
-      // Convert RGB to brightness
+      const bgcolor = getComputedStyle(element).backgroundColor
       const rgb = bgcolor.match(/\d+/g)
       if (!rgb) return
       
       const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000
-      
-      // Default to dark logo unless background is very dark
       const shouldUseDarkLogo = brightness > 60
 
       if (shouldUseDarkLogo !== useDarkLogo) {
@@ -47,7 +42,7 @@ export function Navigation() {
 
     const handleScroll = () => {
       checkBackground()
-      const currentScrollY = window.scrollY
+      const currentScrollY = getScrollY()
       
       if (isMobileMenuOpen) return
       
@@ -61,26 +56,12 @@ export function Navigation() {
       setLastScrollY(currentScrollY)
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isMobileMenuOpen) return
+    
 
-      if (e.clientY < 60) {
-        setIsHovering(true)
-        setIsVisible(true)
-      } else {
-        setIsHovering(false)
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    window.addEventListener('mousemove', handleMouseMove)
-    checkBackground() // Initial check
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('mousemove', handleMouseMove)
-    }
-  }, [lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
+    return addEventListeners({
+      'scroll': handleScroll
+    })
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
 
   const menuItems = [
     { name: "HOME", href: "/" },
