@@ -1,0 +1,9 @@
+.about-section {
+  background-image: url('../../../public/Images/Landing/Section2/bg.jpg'); /* Update with your image path */
+  background-size: cover; /* Cover the entire section */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Prevent repeating */
+  min-height: 100vh;
+  position: relative;
+}
+
