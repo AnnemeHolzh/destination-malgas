@@ -81,10 +81,10 @@ export function Navigation() {
 
   const menuItems = [
     { name: "HOME", href: "/" },
-    { name: "ACCOMODATION", href: "/accomodation" },
-    { name: "BOATING", href: "/boating" },
-    { name: "MARKETING", href: "/marketing" },
-    { name: "DESTINATION", href: "/destination" },
+    { name: "ACCOMODATION", href: "/coming" },
+    { name: "BOATING", href: "/coming" },
+    { name: "MARKETING", href: "/coming" },
+    { name: "DESTINATION", href: "/coming" },
     { name: "CONTACT US", href: "/contact-us" },
   ]
 
