@@ -35,7 +35,7 @@ export default function ContactPage() {
             <div className="space-y-6">
               <h1 className="text-6xl font-custom1">Get in Touch</h1>
               <p className="text-gray-600">
-                Reach out to us and let's make your Malgas experience extraordinary.
+                Reach out to us and let&apos;s make your Malgas experience extraordinary.
               </p>
             </div>
 

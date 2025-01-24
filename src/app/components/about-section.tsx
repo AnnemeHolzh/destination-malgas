@@ -27,11 +27,11 @@ export function AboutSection() {
 
           <div className="bg-white/20 backdrop-blur-sm p-8 rounded-lg max-w-lg">
             <h3 className="text-4xl font-bold text-white mb-4">Get to know us!</h3>
-            <p className="text-xl text-gray-300 mb-8">
-              Our mission is to provide a comprehensive umbrella of services designed to enhance your experience,
-              whether you're here for boating, accommodation, business, tourism, or events. Explore the best of Malgas
-              with us and discover everything this charming destination has to offer.
-            </p>
+<p className="text-xl text-gray-300 mb-8">
+  Our mission is to provide a comprehensive umbrella of services designed to enhance your experience,
+  whether you&apos;re here for boating, accommodation, business, tourism, or events. Explore the best of Malgas
+  with us and discover everything this charming destination has to offer.
+</p>
             <div className="flex justify-center">
               <CustomButton text="Our Services" />
             </div>

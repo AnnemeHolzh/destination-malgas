@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useState } from "react"
 import Image from "next/image"
 import bg from "../../../public/Images/Landing/Section3/bg.jpg"
 import NavButton from "./NavButton"
@@ -97,7 +96,7 @@ export function ReasonsCarousel() {
           </span>
         </h2>
         <p className="text-white mb-6  mx-auto text-center md:text-center text-lg md:text-xl lg:text-2xl font-custom3">
-            Malgas is more than just a place to stay—it's a destination filled with natural beauty and a variety of activities.
+            Malgas is more than just a place to stay—it&apos;s a destination filled with natural beauty and a variety of activities.
           </p>
         <div className="mx-2 sm:mx-4 md:mx-16">
          

@@ -1,8 +1,8 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
-import { Search, User, Menu, X } from "lucide-react"
+import { User, Menu, X } from "lucide-react"
 import Image from "next/image"
 import logoBlack from "../../../public/Images/Layout/logoBlackTransparent.svg" // Update with your actual paths
 import logoWhite from "../../../public/Images/Layout/logoWhiteTransparent.svg" // Update with your actual paths
@@ -57,7 +57,6 @@ export function Navigation() {
 
       setLastScrollY(currentScrollY)
     }
-
     const handleMouseMove = (e: MouseEvent) => {
       if (isMobileMenuOpen) return // Don't handle mouse movement when mobile menu is open
 
@@ -77,7 +76,7 @@ export function Navigation() {
       window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [useDarkLogo])
+  }, [lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
 
   const menuItems = [
     { name: "HOME", href: "/" },

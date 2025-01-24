@@ -11,8 +11,7 @@ interface ImageCarouselProps {
 }
 
 const ImageCarousel: React.FC<ImageCarouselProps> = ({ images, currentIndex }) => {
-  const totalImages = images.length;
-  const displayImages = [...images, ...images]; // Duplicate images for endless effect
+    const displayImages = [...images, ...images]; // Duplicate images for endless effect
 
   return (
     <div className="flex overflow-hidden relative w-full justify-center">

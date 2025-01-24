@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import Image from "next/image"
+import { useState } from "react"
 import styles from "./hero-carousel.module.css"
 import CustomButton from "./ui/button"
 import NavButton from "./NavButton"
