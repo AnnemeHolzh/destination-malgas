@@ -16,6 +16,9 @@ export function Navigation() {
   const [isTransitioning, setIsTransitioning] = useState(false)
 
   useEffect(() => {
+    // Only run this code on the client side
+    if (typeof window === 'undefined') return;
+
     const checkBackground = () => {
       // Get the pixel at the logo's position
       const element = document.elementFromPoint(100, 50)
@@ -46,7 +49,7 @@ export function Navigation() {
       checkBackground()
       const currentScrollY = window.scrollY
       
-      if (isMobileMenuOpen) return // Don't hide nav when mobile menu is open
+      if (isMobileMenuOpen) return
       
       if (currentScrollY < lastScrollY || currentScrollY < 50) {
         setIsVisible(true)
@@ -57,8 +60,9 @@ export function Navigation() {
 
       setLastScrollY(currentScrollY)
     }
+
     const handleMouseMove = (e: MouseEvent) => {
-      if (isMobileMenuOpen) return // Don't handle mouse movement when mobile menu is open
+      if (isMobileMenuOpen) return
 
       if (e.clientY < 60) {
         setIsHovering(true)
