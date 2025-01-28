@@ -16,7 +16,7 @@ export default function BaitAndTacklePage() {
         
         {/* Description Text */}
         <p className="text-center max-w-3xl mb-20 text-black text-lg">
-          Located at Plot 402 Diepkloof, our bait and tackle shop is your one-stop destination for all your fishing needs on the Breede River. We stock a comprehensive range of fishing equipment, from rods and reels to an extensive selection of lures, hooks, and lines. Our knowledgeable staff can provide expert advice on local fishing conditions and the best gear for targeting specific species. Whether you're an experienced angler or just starting out, we have everything you need for a successful day on the water. Fresh bait is available daily, and we also offer a variety of fishing accessories and basic boating supplies.
+          Located at Plot 402 Diepkloof, our bait and tackle shop is your one-stop destination for all your fishing needs on the Breede River. We stock a comprehensive range of fishing equipment, from rods and reels to an extensive selection of lures, hooks, and lines. Our knowledgeable staff can provide expert advice on local fishing conditions and the best gear for targeting specific species. Whether you&apos;re an experienced angler or just starting out, we have everything you need for a successful day on the water. Fresh bait is available daily, and we also offer a variety of fishing accessories and basic boating supplies.
         </p>
 
         {/* Main Image */}

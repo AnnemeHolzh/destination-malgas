@@ -14,9 +14,7 @@ export function Navigation() {
   const [isHovering, setIsHovering] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [useDarkLogo, setUseDarkLogo] = useState(true)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const [useBlackText, setUseBlackText] = useState(false)
-  const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
+  const { isMounted, getScrollY, addEventListeners } = useWindowUtils()
 
   useEffect(() => {
     if (!isMounted) return
@@ -25,10 +23,7 @@ export function Navigation() {
       const mainElement = document.querySelector('main')
       const navTheme = mainElement?.getAttribute('data-nav-theme')
       
-      // Default: black logo, white text
-      // Only change if explicitly set to 'light' (white logo) or 'dark' (black text)
       setUseDarkLogo(navTheme === 'light')
-      setUseBlackText(navTheme === 'dark')
     }
 
     const handleScroll = () => {
@@ -48,11 +43,13 @@ export function Navigation() {
     }
 
     checkTheme()
-    return addEventListeners({
-      'scroll': handleScroll,
-      'mousemove': () => checkTheme()
-    })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen])
+    handleScroll()
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mousemove', checkTheme)
+    }
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, getScrollY, addEventListeners])
 
   const menuItems = [
     { name: "HOME", href: "/" },
@@ -82,7 +79,7 @@ export function Navigation() {
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
                     useDarkLogo ? 'opacity-100' : 'opacity-0'
-                  } ${isTransitioning ? 'transition-opacity' : ''}`}
+                  }`}
                 />
                 <Image
                   src={logoBlack}
@@ -90,7 +87,7 @@ export function Navigation() {
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
                     useDarkLogo ? 'opacity-0' : 'opacity-100'
-                  } ${isTransitioning ? 'transition-opacity' : ''}`}
+                  }`}
                 />
               </div>
             </Link>

@@ -16,7 +16,7 @@ export default function RentalsPages() {
         
         {/* Description Text */}
         <p className="text-center max-w-3xl mb-8 text-black text-lg">
-          Breede River in the Overberg region of the Western Cape. It is situated 25 kilometres north-west of the Breede River mouth at Witsand. Outfit running trips with friendly, knowledgeable, English and Afrikaans speaking guide. There is excellent accommodation, to suit any taste or pocket.
+        Enjoy fishing, boating, swimming, floating and skiing. Picnicking on the water&apos;s edge, watching the birds dart through the reeds and the river life gently cruising by with the slow days. Discover the bliss of the Breede River. Indemnity and compliance regulations apply, ensuring your safety and a hassle-free experience on the water. Let us help you make the most of your fishing adventure!
         </p>
         
         <div className="text-center text-black text-lg mb-20">
