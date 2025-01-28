@@ -15,33 +15,24 @@ export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [useDarkLogo, setUseDarkLogo] = useState(true)
   const [isTransitioning, setIsTransitioning] = useState(false)
+  const [useBlackText, setUseBlackText] = useState(false)
   const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
 
   useEffect(() => {
     if (!isMounted) return
 
-    const checkBackground = () => {
-      const element = document.elementFromPoint(100, 50)
-      if (!element) return
-
-      const bgcolor = getComputedStyle(element).backgroundColor
-      const rgb = bgcolor.match(/\d+/g)
-      if (!rgb) return
+    const checkTheme = () => {
+      const mainElement = document.querySelector('main')
+      const navTheme = mainElement?.getAttribute('data-nav-theme')
       
-      const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000
-      const shouldUseDarkLogo = brightness > 60
-
-      if (shouldUseDarkLogo !== useDarkLogo) {
-        setIsTransitioning(true)
-        setTimeout(() => {
-          setUseDarkLogo(shouldUseDarkLogo)
-          setTimeout(() => setIsTransitioning(false), 150)
-        }, 150)
-      }
+      // Default: black logo, white text
+      // Only change if explicitly set to 'light' (white logo) or 'dark' (black text)
+      setUseDarkLogo(navTheme === 'light')
+      setUseBlackText(navTheme === 'dark')
     }
 
     const handleScroll = () => {
-      checkBackground()
+      checkTheme()
       const currentScrollY = getScrollY()
       
       if (isMobileMenuOpen) return
@@ -56,17 +47,17 @@ export function Navigation() {
       setLastScrollY(currentScrollY)
     }
 
-    
-
+    checkTheme()
     return addEventListeners({
-      'scroll': handleScroll
+      'scroll': handleScroll,
+      'mousemove': () => checkTheme()
     })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen])
 
   const menuItems = [
     { name: "HOME", href: "/" },
     { name: "ACCOMODATION", href: "/coming" },
-    { name: "BOATING", href: "/coming" },
+    { name: "BOATING", href: "/boating" },
     { name: "MARKETING", href: "/coming" },
     { name: "DESTINATION", href: "/coming" },
     { name: "CONTACT US", href: "/contact-us" },
@@ -75,7 +66,7 @@ export function Navigation() {
   return (
     <>
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-sm transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm transition-transform duration-300 ease-in-out ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
         onMouseEnter={() => setIsHovering(true)}
@@ -90,7 +81,7 @@ export function Navigation() {
                   alt="Logo White"
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
-                    useDarkLogo ? 'opacity-0' : 'opacity-100'
+                    useDarkLogo ? 'opacity-100' : 'opacity-0'
                   } ${isTransitioning ? 'transition-opacity' : ''}`}
                 />
                 <Image
@@ -98,7 +89,7 @@ export function Navigation() {
                   alt="Logo Black"
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
-                    useDarkLogo ? 'opacity-100' : 'opacity-0'
+                    useDarkLogo ? 'opacity-0' : 'opacity-100'
                   } ${isTransitioning ? 'transition-opacity' : ''}`}
                 />
               </div>
@@ -110,7 +101,7 @@ export function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-sm font-custom3 text-white hover:text-gray-900 transition-colors"
+                  className="text-sm font-custom3 transition-colors text-white hover:text-gray-300"
                 >
                   {item.name}
                 </Link>
@@ -121,7 +112,7 @@ export function Navigation() {
             <div className="md:hidden flex items-center">
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-white hover:text-gray-300 transition-colors"
+                className="p-2 transition-colors text-white hover:text-gray-300"
               >
                 {isMobileMenuOpen ? (
                   <X className="w-6 h-6" />
@@ -133,7 +124,7 @@ export function Navigation() {
 
             {/* User Icon */}
             <div className="hidden md:flex items-center space-x-4">
-              <button className="p-2 hover:bg-gray-100 rounded-full">
+              <button className="p-2 rounded-full transition-colors text-white hover:text-gray-300">
                 <User className="w-5 h-5" />
               </button>
             </div>
