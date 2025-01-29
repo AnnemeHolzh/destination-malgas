@@ -56,7 +56,7 @@ export async function loginUser(email: string, password: string): Promise<User> 
     loginAttempts.delete(normalizedEmail)
 
     // Remove password from returned user object
-    const { password: _, ...safeUser } = user as Record<string, any>
+    const { password: _password, ...safeUser } = user as Record<string, any>
     return safeUser as User
   } catch (error) {
     // Increment login attempts using normalized email
