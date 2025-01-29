@@ -1,5 +1,6 @@
 'use client';
 
+"use client"
 import Image from "next/image";
 import { createHouse, generateHouseId } from "./services/houseService";
 import { app } from "./Firebase/firebaseConfig";
