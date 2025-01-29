@@ -4,7 +4,6 @@ import { AboutSection } from "./components/about-section"
 import { ReasonsCarousel } from "./components/reasons-carousel"
 
 export default function Home() {
-}
   return (
     <>
       <HeroCarouselWrapper />
@@ -13,4 +12,5 @@ export default function Home() {
     </>
   )
 }
+
 
