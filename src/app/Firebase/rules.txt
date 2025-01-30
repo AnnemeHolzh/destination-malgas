@@ -1,0 +1,29 @@
+{
+  "rules": {
+    ".read": true,  // Allow public read access to all data
+    "users": {
+      "$uid": {
+        ".write": "$uid === auth.uid",  // Users can only write their own data
+        ".validate": "newData.hasChildren(['email', 'name', 'role'])"
+      }
+    },
+    "houses": {
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'",
+      "$houseId": {
+        ".validate": "newData.hasChildren(['name', 'capacity', 'beds', 'baths'])"
+      }
+    },
+    "amenities": {
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+    },
+    "reservations": {
+      ".write": "auth != null",
+      "$reservationId": {
+        ".validate": "newData.hasChildren(['houseId', 'pax', 'dates'])"
+      }
+    },
+    "houseAvailability": {
+      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+    }
+  }
+}
