@@ -7,9 +7,6 @@ import Image from "next/image"
 import logoBlack from "../../../public/Images/Layout/logoBlackTransparent.svg" // Update with your actual paths
 import logoWhite from "../../../public/Images/Layout/logoWhiteTransparent.svg" // Update with your actual paths
 import { useWindowUtils } from '../hooks/useWindowUtils'
-import { LoginModal } from "./auth/LoginModal"
-import { loginUser } from "../services/authService"
-import { User as UserType } from "../DataModels/User"
 
 export function Navigation() {
   const [isVisible, setIsVisible] = useState(true)
@@ -19,8 +16,6 @@ export function Navigation() {
   const [useDarkLogo, setUseDarkLogo] = useState(true)
   const [isTransitioning, setIsTransitioning] = useState(false)
   const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<Omit<UserType, 'password'> | null>(null)
 
   useEffect(() => {
     if (!isMounted) return
@@ -61,47 +56,21 @@ export function Navigation() {
       setLastScrollY(currentScrollY)
     }
 
+    
+
     return addEventListeners({
       'scroll': handleScroll
     })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getComputedStyle, getScrollY])
-
-  useEffect(() => {
-    // Load user from localStorage on mount
-    const savedUser = localStorage.getItem('currentUser')
-    if (savedUser) {
-      setCurrentUser(JSON.parse(savedUser))
-    }
-  }, [])
-
-  useEffect(() => {
-    // Save user to localStorage when it changes
-    if (currentUser) {
-      localStorage.setItem('currentUser', JSON.stringify(currentUser))
-    } else {
-      localStorage.removeItem('currentUser')
-    }
-  }, [currentUser])
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
 
   const menuItems = [
     { name: "HOME", href: "/" },
-    { name: "ACCOMMODATION", href: "/coming" },
+    { name: "ACCOMODATION", href: "/coming" },
     { name: "BOATING", href: "/coming" },
     { name: "MARKETING", href: "/coming" },
     { name: "DESTINATION", href: "/coming" },
     { name: "CONTACT US", href: "/contact-us" },
-    ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
   ]
-
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      const user = await loginUser(email, password)
-      setCurrentUser(user)
-      setIsLoginModalOpen(false)
-    } catch (error) {
-      throw error
-    }
-  }
 
   return (
     <>
@@ -164,10 +133,7 @@ export function Navigation() {
 
             {/* User Icon */}
             <div className="hidden md:flex items-center space-x-4">
-              <button 
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={() => setIsLoginModalOpen(true)}
-              >
+              <button className="p-2 hover:bg-gray-100 rounded-full">
                 <User className="w-5 h-5" />
               </button>
             </div>
@@ -208,12 +174,6 @@ export function Navigation() {
           </div>
         </div>
       </div>
-
-      <LoginModal 
-        isOpen={isLoginModalOpen}
-        onClose={() => setIsLoginModalOpen(false)}
-        onLogin={handleLogin}
-      />
     </>
   )
 }
