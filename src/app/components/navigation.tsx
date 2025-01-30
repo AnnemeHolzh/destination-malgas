@@ -20,7 +20,7 @@ export function Navigation() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
-  const [currentUser, setCurrentUser] = useState<UserType | null>(null)
+  const [currentUser, setCurrentUser] = useState<Omit<UserType, 'password'> | null>(null)
 
   useEffect(() => {
     if (!isMounted) return
@@ -85,7 +85,7 @@ export function Navigation() {
 
   const menuItems = [
     { name: "HOME", href: "/" },
-    { name: "ACCOMODATION", href: "/coming" },
+    { name: "ACCOMMODATION", href: "/coming" },
     { name: "BOATING", href: "/coming" },
     { name: "MARKETING", href: "/coming" },
     { name: "DESTINATION", href: "/coming" },
