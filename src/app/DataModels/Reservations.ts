@@ -1,3 +1,4 @@
+//TODO: Will be used in future implementation
 interface Reservation {
     reservationId: string;
     houseId: string;
