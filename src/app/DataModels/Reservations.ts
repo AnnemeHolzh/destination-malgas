@@ -1,5 +1,5 @@
 // TODO: Will be used in future implementation
-interface Reservation {
+export interface Reservation {
     reservationId: string;
     houseId: string;
     pax: {

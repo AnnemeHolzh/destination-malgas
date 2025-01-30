@@ -14,7 +14,7 @@ interface LoginAttempt {
 
 const loginAttempts = new Map<string, LoginAttempt>()
 
-export async function loginUser(email: string, password: string): Promise<User> {
+export async function loginUser(email: string, password: string): Promise<Omit<User, 'password'>> {
   // Convert email to lowercase for case-insensitive comparison
   const normalizedEmail = email.toLowerCase()
   
@@ -56,8 +56,8 @@ export async function loginUser(email: string, password: string): Promise<User> 
     loginAttempts.delete(normalizedEmail)
 
     // Remove password from returned user object
-    const { password: _password, ...safeUser } = user as Record<string, any>
-    return safeUser as User
+    const { password: _password, ...safeUser } = user as User
+    return safeUser
   } catch (error) {
     // Increment login attempts using normalized email
     loginAttempts.set(normalizedEmail, {
