@@ -55,8 +55,8 @@ export async function loginUser(email: string, password: string): Promise<User> 
     // Reset login attempts on successful login
     loginAttempts.delete(normalizedEmail)
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password: _, ...safeUser } = user as Record<string, any> // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+    const { password: _, ...safeUser } = user as Record<string, any> 
     return safeUser as User
   } catch (error) {
     // Increment login attempts using normalized email
