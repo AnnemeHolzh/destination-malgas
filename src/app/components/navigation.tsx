@@ -87,7 +87,7 @@ export function Navigation() {
 
   const menuItems = [
     { name: "HOME", href: "/" },
-    { name: "ACCOMODATION", href: "/coming" },
+    { name: "ACCOMODATION", href: "/accommodation" },
     { name: "BOATING", href: "/coming" },
     { name: "MARKETING", href: "/coming" },
     { name: "DESTINATION", href: "/coming" },
