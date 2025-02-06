@@ -19,7 +19,8 @@ export default function Accommodations() {
       try {
         const cachedData = cache.get('houses')
         if (cachedData) {
-          setHouses(cachedData)
+          const activeHouses = cachedData.filter((house: House) => house.active)
+          setHouses(activeHouses)
           return
         }
 
@@ -33,8 +34,12 @@ export default function Accommodations() {
             ))
           }
         })))
+        
+        // Filter active houses before setting state
         const activeHouses = optimizedHouses.filter(house => house.active)
         setHouses(activeHouses)
+        
+        // Cache all houses for admin purposes
         cache.set('houses', housesData)
       } catch (err) {
         setError('Failed to fetch accommodations. Please try again later.')

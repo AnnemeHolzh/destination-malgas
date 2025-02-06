@@ -10,9 +10,10 @@ const AdminSidebar = ({ activeFeature, setActiveFeature }: AdminSidebarProps) =>
     { id: 'addHouse', label: 'Add House', icon: Home },
     { id: 'addAmenity', label: 'Add Amenity', icon: Plus },
     { id: 'addStaffUser', label: 'Add Staff User', icon: User },
-    { id: 'hideHouse', label: 'Hide House', icon: EyeOff },
+    { id: 'manageHouses', label: 'Manage Houses', icon: Home },
     { id: 'sendNewsletter', label: 'Send Newsletter', icon: Mail },
   ]
+
 
   return (
     <aside className="w-64 bg-white shadow-lg">
