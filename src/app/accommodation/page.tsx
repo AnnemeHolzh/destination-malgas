@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react'
 import { getAllHouses } from '../services/houseService'
 import { House } from '../DataModels/House'
 import Image from 'next/image'
+import { SkeletonList } from "@/components/Skeleton"
+import { optimizeBase64Image } from '@/utils/imageOptimization'
+import { cache } from '../../services/cache'
 
 export default function Accommodations() {
   const [houses, setHouses] = useState<House[]>([])
@@ -14,10 +17,25 @@ export default function Accommodations() {
   useEffect(() => {
     const fetchHouses = async () => {
       try {
+        const cachedData = cache.get('houses')
+        if (cachedData) {
+          setHouses(cachedData)
+          return
+        }
+
         const housesData = await getAllHouses()
-        // Filter to only show active houses
-        const activeHouses = housesData.filter(house => house.active)
+        const optimizedHouses = await Promise.all(housesData.map(async house => ({
+          ...house,
+          media: {
+            ...house.media,
+            photos: await Promise.all(house.media.photos.map(photo => 
+              optimizeBase64Image(photo)
+            ))
+          }
+        })))
+        const activeHouses = optimizedHouses.filter(house => house.active)
         setHouses(activeHouses)
+        cache.set('houses', housesData)
       } catch (err) {
         setError('Failed to fetch accommodations. Please try again later.')
         console.error(err)
@@ -30,7 +48,12 @@ export default function Accommodations() {
   }, [])
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>
+    return (
+      <main className="container mx-auto px-4 py-12">
+        <h1 className="text-4xl font-bold text-center mb-12">Our Accommodations</h1>
+        <SkeletonList count={6} />
+      </main>
+    )
   }
 
   if (error) {
@@ -54,6 +77,7 @@ export default function Accommodations() {
                   src={`data:image/jpeg;base64,${house.media.photos[0]}`}
                   alt={house.name}
                   className="object-cover w-full h-full"
+                  loading="lazy"
                 />
               </div>
             )}

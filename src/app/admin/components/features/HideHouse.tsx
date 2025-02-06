@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { getAllHouses, updateHouse } from '../../../services/houseService'
 import { House } from '../../../DataModels/House'
 import Image from 'next/image'
+import { SkeletonList } from "@/components/Skeleton";
 
 export default function HideHouse() {
   const [houses, setHouses] = useState<House[]>([])
@@ -42,7 +43,12 @@ export default function HideHouse() {
   }
 
   if (loading) {
-    return <div className="p-6">Loading houses...</div>
+    return (
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold mb-4">Manage House Visibility</h2>
+        <SkeletonList count={3} />
+      </div>
+    );
   }
 
   if (error) {
