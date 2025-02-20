@@ -17,8 +17,7 @@ export function Navigation() {
   const [isHovering, setIsHovering] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [useDarkLogo, setUseDarkLogo] = useState(true)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
+  const { isMounted, getScrollY, addEventListeners } = useWindowUtils()
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<UserType | null>(null)
 
