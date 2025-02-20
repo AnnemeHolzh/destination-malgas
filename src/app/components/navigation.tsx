@@ -77,7 +77,7 @@ export function Navigation() {
     { name: "HOME", href: "/" },
     { name: "ACCOMODATION", href: "/coming" },
     { name: "BOATING", href: "/boating" },
-    { name: "MARKETING", href: "/coming" },
+    { name: "MARKETING", href: "/marketing" },
     { name: "DESTINATION", href: "/coming" },
     { name: "CONTACT US", href: "/contact-us" },
     ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
