@@ -17,36 +17,22 @@ export function Navigation() {
   const [isHovering, setIsHovering] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [useDarkLogo, setUseDarkLogo] = useState(true)
-  const [isTransitioning, setIsTransitioning] = useState(false)
-  const { isMounted, getScrollY, getComputedStyle, addEventListeners } = useWindowUtils()
+  const { isMounted, getScrollY, addEventListeners } = useWindowUtils()
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [currentUser, setCurrentUser] = useState<UserType | null>(null)
 
   useEffect(() => {
     if (!isMounted) return
 
-    const checkBackground = () => {
-      const element = document.elementFromPoint(100, 50)
-      if (!element) return
-
-      const bgcolor = getComputedStyle(element).backgroundColor
-      const rgb = bgcolor.match(/\d+/g)
-      if (!rgb) return
+    const checkTheme = () => {
+      const mainElement = document.querySelector('main')
+      const navTheme = mainElement?.getAttribute('data-nav-theme')
       
-      const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000
-      const shouldUseDarkLogo = brightness > 60
-
-      if (shouldUseDarkLogo !== useDarkLogo) {
-        setIsTransitioning(true)
-        setTimeout(() => {
-          setUseDarkLogo(shouldUseDarkLogo)
-          setTimeout(() => setIsTransitioning(false), 150)
-        }, 150)
-      }
+      setUseDarkLogo(navTheme === 'light')
     }
 
     const handleScroll = () => {
-      checkBackground()
+      checkTheme()
       const currentScrollY = getScrollY()
       
       if (isMobileMenuOpen) return
@@ -61,6 +47,8 @@ export function Navigation() {
       setLastScrollY(currentScrollY)
     }
 
+    checkTheme()
+    handleScroll()
     return addEventListeners({
       'scroll': handleScroll
     })
@@ -85,10 +73,12 @@ export function Navigation() {
 
   const menuItems = [
     { name: "HOME", href: "/" },
+
     { name: "ACCOMODATION", href: "/accommodation" },
-    { name: "BOATING", href: "/coming" },
-    { name: "MARKETING", href: "/coming" },
-    { name: "DESTINATION", href: "/coming" },
+    { name: "BOATING", href: "/boating" },
+    { name: "MARKETING", href: "/marketing" },
+    { name: "DESTINATION", href: "/destination" },
+
     { name: "CONTACT US", href: "/contact-us" },
     ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
   ]
@@ -106,7 +96,7 @@ export function Navigation() {
   return (
     <>
       <nav 
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-sm transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm transition-transform duration-300 ease-in-out ${
           isVisible ? 'translate-y-0' : '-translate-y-full'
         }`}
         onMouseEnter={() => setIsHovering(true)}
@@ -121,16 +111,16 @@ export function Navigation() {
                   alt="Logo White"
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
-                    useDarkLogo ? 'opacity-0' : 'opacity-100'
-                  } ${isTransitioning ? 'transition-opacity' : ''}`}
+                    useDarkLogo ? 'opacity-100' : 'opacity-0'
+                  }`}
                 />
                 <Image
                   src={logoBlack}
                   alt="Logo Black"
                   fill
                   className={`absolute top-0 left-0 transition-opacity duration-300 ${
-                    useDarkLogo ? 'opacity-100' : 'opacity-0'
-                  } ${isTransitioning ? 'transition-opacity' : ''}`}
+                    useDarkLogo ? 'opacity-0' : 'opacity-100'
+                  }`}
                 />
               </div>
             </Link>
@@ -141,7 +131,7 @@ export function Navigation() {
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="text-sm font-custom3 text-white hover:text-gray-900 transition-colors"
+                  className="text-sm font-custom3 transition-colors text-white hover:text-gray-300"
                 >
                   {item.name}
                 </Link>
@@ -152,7 +142,7 @@ export function Navigation() {
             <div className="md:hidden flex items-center">
               <button 
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 text-white hover:text-gray-300 transition-colors"
+                className="p-2 transition-colors text-white hover:text-gray-300"
               >
                 {isMobileMenuOpen ? (
                   <X className="w-6 h-6" />

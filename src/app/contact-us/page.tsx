@@ -4,9 +4,11 @@ import ContactForm from "./contact-form"
 import headerImage from "../../../public/Images/ContactUs/headerImage.jpg"
 
 
+
+
 export default function ContactPage() {
   return (
-    <main className="w-full bg-black">
+    <main className="w-full bg-black" data-logo-theme="white">
       <div className="relative w-full h-[50vh] min-h-[400px]">
         <Image 
           src={headerImage} 
