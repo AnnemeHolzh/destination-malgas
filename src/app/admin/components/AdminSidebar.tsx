@@ -12,6 +12,8 @@ const AdminSidebar = ({ activeFeature, setActiveFeature }: AdminSidebarProps) =>
     { id: 'addStaffUser', label: 'Add Staff User', icon: User },
     { id: 'manageHouses', label: 'Manage Houses', icon: Home },
     { id: 'sendNewsletter', label: 'Send Newsletter', icon: Mail },
+    { id: 'myProfile', label: 'My Profile', icon: User },
+    { id: 'manageAmenities', label: 'Manage Amenities', icon: Home },
   ]
 
 

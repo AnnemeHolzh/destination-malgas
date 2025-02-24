@@ -9,6 +9,8 @@ import AddAmenity from './components/features/AddAmenity'
 import AddStaffUser from './components/features/AddStaffUser'
 import ManageHouses from './components/features/ManageHouses'
 import SendNewsletter from './components/features/SendNewsletter'
+import MyProfile from './components/features/MyProfile'
+import ManageAmenities from './components/features/ManageAmenities'
 import { ArrowLeft } from 'lucide-react'
 
 function AdminDashboard() {
@@ -36,7 +38,9 @@ function AdminDashboard() {
     addAmenity: <AddAmenity />,
     addStaffUser: <AddStaffUser />,
     manageHouses: <ManageHouses />,
-    sendNewsletter: <SendNewsletter />
+    sendNewsletter: <SendNewsletter />,
+    myProfile: <MyProfile />,
+    manageAmenities: <ManageAmenities />,
   }
 
 
