@@ -7,6 +7,7 @@ import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';
 import atob from 'atob';
 import { Amenity } from '../../../DataModels/Amenity';
+import Image from 'next/image';
 
 interface ImageUpload extends UploadProgress {
   file: File;
@@ -278,9 +279,11 @@ export default function AddHouse() {
           <div className="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {images.map((img, index) => (
               <div key={index} className="relative">
-                <img
+                <Image
                   src={img.preview}
                   alt={`Preview ${index + 1}`}
+                  width={96}
+                  height={96}
                   className="h-24 w-24 object-cover rounded-lg"
                 />
                 <button
