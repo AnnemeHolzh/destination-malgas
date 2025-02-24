@@ -7,10 +7,9 @@ import AdminSidebar from './components/AdminSidebar'
 import AddHouse from './components/features/AddHouse'
 import AddAmenity from './components/features/AddAmenity'
 import AddStaffUser from './components/features/AddStaffUser'
-import HideHouse from './components/features/HideHouse'
+import ManageHouses from './components/features/ManageHouses'
 import SendNewsletter from './components/features/SendNewsletter'
 import { ArrowLeft } from 'lucide-react'
-//This is my new commit comment +1
 
 function AdminDashboard() {
   const [activeFeature, setActiveFeature] = useState<string>('addHouse')
@@ -36,9 +35,10 @@ function AdminDashboard() {
     addHouse: <AddHouse />,
     addAmenity: <AddAmenity />,
     addStaffUser: <AddStaffUser />,
-    hideHouse: <HideHouse />,
+    manageHouses: <ManageHouses />,
     sendNewsletter: <SendNewsletter />
   }
+
 
   return (
     <div className="flex h-screen bg-gray-100">

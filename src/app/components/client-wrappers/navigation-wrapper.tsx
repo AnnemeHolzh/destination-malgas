@@ -7,6 +7,14 @@ const Navigation = dynamic(
   { ssr: false }
 )
 
+// Remove the unused navigation array
+// const navigation = [
+//   { name: 'Home', href: '/' },
+//   { name: 'About', href: '/about' },
+//   { name: 'Accommodations', href: '/accommodations' },
+//   { name: 'Contact', href: '/contact-us' },
+// ]
+
 export function NavigationWrapper() {
   return <Navigation />
 }

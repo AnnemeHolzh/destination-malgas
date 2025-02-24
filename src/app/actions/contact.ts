@@ -1,7 +1,7 @@
 "use server"
 import { Resend } from 'resend';
 
-const resend = new Resend('re_a3prZeWu_3DLe4iUKRj6LPU8dgxRcydKA');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendEmail(formData: FormData) {
   try {
