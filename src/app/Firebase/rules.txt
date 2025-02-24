@@ -3,7 +3,7 @@
     ".read": true,  // Allow public read access to all data
     "users": {
       "$uid": {
-        ".write": "$uid === auth.uid",  // Users can only write their own data
+        ".write": "$uid === auth.uid || (auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff')",
         ".validate": "newData.hasChildren(['email', 'name', 'role'])"
       }
     },

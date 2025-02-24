@@ -1,6 +1,7 @@
 import { ref, set, get, update, remove } from "firebase/database";
 import type { User } from "../DataModels/User";
 import { database } from "../Firebase/firebaseConfig";
+import bcrypt from "bcryptjs";
 
 // Create a new user
 export async function createUser(user: User): Promise<void> {
@@ -63,4 +64,8 @@ export async function deleteUser(uid: string): Promise<void> {
 // Helper function to generate a new user ID
 export function generateUserId(): string {
   return 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 10); // 10 is the salt rounds
 } 

@@ -49,11 +49,10 @@ export function Navigation() {
 
     checkTheme()
     handleScroll()
-
     return addEventListeners({
       'scroll': handleScroll
     })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo])
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getComputedStyle, getScrollY])
 
   useEffect(() => {
     // Load user from localStorage on mount
@@ -74,10 +73,12 @@ export function Navigation() {
 
   const menuItems = [
     { name: "HOME", href: "/" },
-    { name: "ACCOMODATION", href: "/coming" },
+
+    { name: "ACCOMODATION", href: "/accommodation" },
     { name: "BOATING", href: "/boating" },
     { name: "MARKETING", href: "/marketing" },
     { name: "DESTINATION", href: "/destination" },
+
     { name: "CONTACT US", href: "/contact-us" },
     ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
   ]

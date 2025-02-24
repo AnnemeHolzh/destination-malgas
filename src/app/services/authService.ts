@@ -65,7 +65,7 @@ export async function loginUser(email: string, password: string): Promise<User> 
       lastAttempt: Date.now()
     })
     
-    throw error
+    throw error 
   }
 }
 
