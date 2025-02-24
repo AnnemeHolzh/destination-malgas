@@ -2,16 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { getAllHouses } from '../services/houseService'
+import { getAllAmenities } from '../services/amenityService'
 import { House } from '../DataModels/House'
-import Image from 'next/image'
+import { Amenity } from '../DataModels/Amenity'
 import { SkeletonList } from "@/components/Skeleton"
 import { optimizeBase64Image } from '@/utils/imageOptimization'
 import { cache } from '../../services/cache'
+import HouseCard from '@/components/HouseCard'
 
 export default function Accommodations() {
   const [houses, setHouses] = useState<House[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [amenities, setAmenities] = useState<Amenity[]>([])
 
   // Fetch houses from Firebase
   useEffect(() => {
@@ -25,6 +28,7 @@ export default function Accommodations() {
         }
 
         const housesData = await getAllHouses()
+        const amenitiesData = await getAllAmenities()
         const optimizedHouses = await Promise.all(housesData.map(async house => ({
           ...house,
           media: {
@@ -38,6 +42,7 @@ export default function Accommodations() {
         // Filter active houses before setting state
         const activeHouses = optimizedHouses.filter(house => house.active)
         setHouses(activeHouses)
+        setAmenities(amenitiesData)
         
         // Cache all houses for admin purposes
         cache.set('houses', housesData)
@@ -71,36 +76,11 @@ export default function Accommodations() {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {houses.map((house) => (
-          <div 
-            key={house.houseId}
-            className="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-105"
-          >
-            {/* House Image */}
-            {house.media.photos[0] && (
-              <div className="relative aspect-square">
-                <img
-                  src={`data:image/jpeg;base64,${house.media.photos[0]}`}
-                  alt={house.name}
-                  className="object-cover w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-            )}
-
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-            {/* House Info */}
-            <div className="absolute inset-0 flex flex-col justify-end p-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <h2 className="text-2xl font-bold mb-2">{house.name}</h2>
-              <p className="text-sm line-clamp-3">{house.description}</p>
-            </div>
-
-            {/* House Name (always visible) */}
-            <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-4">
-              <h2 className="text-xl font-bold text-white text-center">{house.name}</h2>
-            </div>
-          </div>
+          <HouseCard 
+            key={house.houseId} 
+            house={house} 
+            amenitiesList={amenities}
+          />
         ))}
       </div>
     </main>
