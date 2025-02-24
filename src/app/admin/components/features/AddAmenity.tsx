@@ -4,10 +4,10 @@ import { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { generateAmenityId, createAmenity } from '../../../services/amenityService'
 import { processSvg } from '../../../utils/imageProcessing'
-import { Plus, Upload } from 'lucide-react'
+import { Upload } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
 
-function ErrorFallback({ error, resetErrorBoundary }: any) {
+function ErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
     <div role="alert">
       <p>Something went wrong:</p>

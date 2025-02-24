@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { getAllHouses, updateHouse, deleteHouse } from '../../../services/houseService'
 import { House } from '../../../DataModels/House'
-import { Check, X, Edit, Trash2, MoreVertical } from 'lucide-react'
+import { Check, Edit, Trash2, MoreVertical } from 'lucide-react'
 import Image from 'next/image'
 import EditHouseForm from './EditHouseForm'
 
@@ -81,7 +81,7 @@ export default function ManageHouses() {
       setHouses(prev => prev.map(house => 
         house.houseId === houseId ? { ...house, active: !isActive } : house
       ))
-    } catch (err) {
+    } catch {
       setError('Failed to update house status')
     }
   }
@@ -94,7 +94,7 @@ export default function ManageHouses() {
       setHouses(prev => prev.filter(house => house.houseId !== selectedHouse.houseId))
       setIsDeleteModalOpen(false)
       setSelectedHouse(null)
-    } catch (err) {
+    } catch {
       setError('Failed to delete house')
     }
   }
@@ -107,7 +107,7 @@ export default function ManageHouses() {
       ))
       setIsEditModalOpen(false)
       setSelectedHouse(null)
-    } catch (err) {
+    } catch {
       setError('Failed to update house')
     }
   }

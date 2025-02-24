@@ -14,7 +14,7 @@ export const cache = {
     return data;
   },
   
-  set(key: string, data: any) {
+  set<T>(key: string, data: T) {
     const item = JSON.stringify({
       timestamp: Date.now(),
       data

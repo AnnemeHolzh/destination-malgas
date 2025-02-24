@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { House } from '../app/DataModels/House'
 import { Amenity } from '../app/DataModels/Amenity'
 import { Bed, Bath, Check } from 'lucide-react'
+import Image from 'next/image'
 
 interface HouseCardProps {
   house: House
@@ -29,14 +30,14 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
     >
       {/* House Image */}
       {house.media.photos[0] && (
-        <div className="relative aspect-square">
-          <img
-            src={`data:image/jpeg;base64,${house.media.photos[0]}`}
-            alt={house.name}
-            className="object-cover w-full h-full"
-            loading="lazy"
-          />
-        </div>
+        <Image
+          src={`data:image/jpeg;base64,${house.media.photos[0]}`}
+          alt={house.name}
+          width={320}
+          height={240}
+          className="object-cover w-full h-full"
+          loading="lazy"
+        />
       )}
 
       {/* Bottom Overlay (Non-hover state) */}

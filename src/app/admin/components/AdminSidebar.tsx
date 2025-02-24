@@ -1,4 +1,4 @@
-import { Home, Plus, User, EyeOff, Mail } from 'lucide-react'
+import { Home, Plus, User, Mail } from 'lucide-react'
 
 interface AdminSidebarProps {
   activeFeature: string

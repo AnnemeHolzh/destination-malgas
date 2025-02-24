@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { House } from '../../../DataModels/House';
 import { createHouse, generateHouseId } from '../../../services/houseService';
-import { uploadImage, UploadProgress, processImage } from '../../../services/imageService';
+import { UploadProgress, processImage } from '../../../services/imageService';
 import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';
 import atob from 'atob';
@@ -44,7 +44,7 @@ export default function AddHouse() {
       }), {});
       setAmenities(amenitiesMap);
       setAmenitiesList(amenitiesList);
-    } catch (error) {
+    } catch {
       setError('Failed to load amenities');
     }
   };
@@ -107,7 +107,7 @@ export default function AddHouse() {
       });
       setImages([]);
 
-    } catch (error) {
+    } catch {
       setError('Failed to create house. Please try again.');
     } finally {
       setLoading(false);

@@ -1,5 +1,3 @@
-import sharp from 'sharp';
-
 export async function convertToWebP(file: File): Promise<File> {
   try {
     const image = await createImageBitmap(file);

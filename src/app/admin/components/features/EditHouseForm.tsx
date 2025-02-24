@@ -35,7 +35,7 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       try {
         const amenitiesList = await getAllAmenities()
         setAmenities(amenitiesList)
-      } catch (err) {
+      } catch {
         setError('Failed to load amenities')
       }
     }
@@ -112,7 +112,7 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       }
 
       await onUpdate(updatedHouse)
-    } catch (err) {
+    } catch {
       setError('Failed to update house')
     } finally {
       setLoading(false)
