@@ -63,4 +63,16 @@ export async function deleteAmenity(amenityId: string): Promise<void> {
 // Helper function to generate a new amenity ID
 export function generateAmenityId(): string {
   return 'amenity_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+export async function getAmenities(): Promise<Amenity[]> {
+  try {
+    const snapshot = await get(ref(database, 'amenities'))
+    if (!snapshot.exists()) return []
+    
+    return Object.values(snapshot.val()) as Amenity[]
+  } catch (error) {
+    console.error('Error fetching amenities:', error)
+    throw error
+  }
 } 

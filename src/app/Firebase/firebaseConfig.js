@@ -13,7 +13,7 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.FIREBASE_APP_ID,
-  databaseURL: process.env.FIREBASE_DATABASE_URL
+  databaseURL: "https://destinationmalgasdb-c1203-default-rtdb.firebaseio.com"
 };
 
 // Initialize Firebase only if it hasn't been initialized

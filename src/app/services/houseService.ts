@@ -67,4 +67,14 @@ export async function deleteHouse(houseId: string): Promise<void> {
 // Helper function to generate a new house ID
 export function generateHouseId(): string {
   return 'house_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+export async function getHouseById(houseId: string): Promise<House | null> {
+  try {
+    const snapshot = await get(ref(database, `houses/${houseId}`))
+    return snapshot.exists() ? { houseId, ...snapshot.val() } : null
+  } catch (error) {
+    console.error('Error fetching house:', error)
+    return null
+  }
 } 

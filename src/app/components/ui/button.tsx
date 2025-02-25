@@ -3,11 +3,12 @@
 import React from 'react';
 
 interface CustomButtonProps {
-  text: string;
-  onClick?: () => void;
+  children: React.ReactNode
+  onClick?: (e: React.MouseEvent) => void;
+  className?: string;
 }
 
-const CustomButton: React.FC<CustomButtonProps> = ({ text, onClick }) => {
+const CustomButton: React.FC<CustomButtonProps> = ({ children, onClick }) => {
   return (
     <button
       onClick={onClick}
@@ -16,7 +17,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({ text, onClick }) => {
         border-2 border-white
         hover:scale-105"
     >
-      {text}
+      {children}
     </button>
   );
 };
