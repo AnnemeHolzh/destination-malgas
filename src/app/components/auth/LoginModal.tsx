@@ -3,11 +3,7 @@ import { X } from "lucide-react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/contactButton"
 import { loginUser } from "../../services/authService"
-
-interface UserType {
-  role: string;
-  // Add other user properties as necessary
-}
+import { User as UserType } from "../../DataModels/User"
 
 interface LoginModalProps {
   isOpen: boolean;

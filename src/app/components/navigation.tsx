@@ -83,14 +83,9 @@ export function Navigation() {
     ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
   ]
 
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      const user = await loginUser(email, password)
-      setCurrentUser(user)
-      setIsLoginModalOpen(false)
-    } catch (error) {
-      throw error
-    }
+  const handleLogin = (user: UserType) => {
+    setCurrentUser(user)
+    setIsLoginModalOpen(false)
   }
 
   return (
