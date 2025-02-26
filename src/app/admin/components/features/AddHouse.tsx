@@ -5,7 +5,6 @@ import { createHouse, generateHouseId } from '../../../services/houseService';
 import { UploadProgress, processImage } from '../../../services/imageService';
 import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';
-import atob from 'atob';
 import { Amenity } from '../../../DataModels/Amenity';
 import Image from 'next/image';
 
@@ -17,10 +16,11 @@ interface ImageUpload extends UploadProgress {
 export default function AddHouse() {
   const [house, setHouse] = useState<Partial<House>>({
     name: '',
-    capacity: { adults: 0, children: 0 },
+    capacity: 0,
     beds: 0,
     baths: 0,
     description: '',
+    shortDescription: '',
     media: { photos: [], videos: [] },
     amenities: {},
     active: true,
@@ -29,7 +29,6 @@ export default function AddHouse() {
   const [images, setImages] = useState<ImageUpload[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [amenities, setAmenities] = useState<Record<string, string>>({});
   const [amenitiesList, setAmenitiesList] = useState<Amenity[]>([]);
 
   useEffect(() => {
@@ -39,11 +38,6 @@ export default function AddHouse() {
   const loadAmenities = async () => {
     try {
       const amenitiesList = await getAllAmenities();
-      const amenitiesMap = amenitiesList.reduce((acc, amenity) => ({
-        ...acc,
-        [amenity.amenityId]: amenity.name
-      }), {});
-      setAmenities(amenitiesMap);
       setAmenitiesList(amenitiesList);
     } catch {
       setError('Failed to load amenities');
@@ -98,7 +92,7 @@ export default function AddHouse() {
       // Reset form
       setHouse({
         name: '',
-        capacity: { adults: 0, children: 0 },
+        capacity: 0,
         beds: 0,
         baths: 0,
         description: '',
@@ -150,37 +144,15 @@ export default function AddHouse() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Adult Capacity</label>
+              <label className="block text-sm font-medium text-gray-700">Total Capacity</label>
               <input
                 type="number"
                 min="0"
                 required
-                value={house.capacity?.adults || 0}
+                value={house.capacity || 0}
                 onChange={e => setHouse(prev => ({
                   ...prev,
-                  capacity: { 
-                    ...prev.capacity,
-                    adults: parseInt(e.target.value) || 0,
-                    children: prev.capacity?.children ?? 0
-                  }
-                }))}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Child Capacity</label>
-              <input
-                type="number"
-                min="0"
-                required
-                value={house.capacity?.children || 0}
-                onChange={e => setHouse(prev => ({
-                  ...prev,
-                  capacity: { 
-                    ...prev.capacity,
-                    children: parseInt(e.target.value) || 0,
-                    adults: prev.capacity?.adults ?? 0
-                  }
+                  capacity: parseInt(e.target.value) || 0
                 }))}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
@@ -224,37 +196,70 @@ export default function AddHouse() {
           />
         </div>
 
+        {/* Short Description */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Short Description</label>
+          <textarea
+            required
+            value={house.shortDescription}
+            onChange={e => setHouse(prev => ({ ...prev, shortDescription: e.target.value }))}
+            rows={2}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
+        </div>
+
         {/* Amenities */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {Object.entries(amenities).map(([id, name]) => (
-              <label key={id} className="flex items-center space-x-2">
+            {amenitiesList.map((amenity) => (
+              <div key={amenity.amenityId} className="space-y-2">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={!!house.amenities?.[amenity.amenityId]?.available}
+                    onChange={e => setHouse(prev => ({
+                      ...prev,
+                      amenities: {
+                        ...prev.amenities,
+                        [amenity.amenityId]: {
+                          available: e.target.checked,
+                          amount: e.target.checked ? 1 : 0
+                        }
+                      }
+                    }))}
+                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  />
+                  <div className="flex items-center gap-2">
+                    {amenity.icon && (
+                      <div 
+                        className="w-5 h-5"
+                        dangerouslySetInnerHTML={{ 
+                          __html: atob(amenity.icon.split(',')[1])
+                            .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
+                        }}
+                      />
+                    )}
+                    <span className="text-sm text-gray-700">{amenity.name}</span>
+                  </div>
+                </label>
                 <input
-                  type="checkbox"
-                  checked={!!house.amenities?.[id]}
+                  type="number"
+                  min="0"
+                  value={house.amenities?.[amenity.amenityId]?.amount}
                   onChange={e => setHouse(prev => ({
                     ...prev,
                     amenities: {
                       ...prev.amenities,
-                      [id]: e.target.checked
+                      [amenity.amenityId]: {
+                        available: prev.amenities?.[amenity.amenityId]?.available ?? false,
+                        amount: parseInt(e.target.value) || 0
+                      }
                     }
                   }))}
-                  className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                  className="w-full rounded-md border-gray-300 shadow-sm"
                 />
-                <div className="flex items-center space-x-2">
-                  {amenitiesList.find(a => a.amenityId === id)?.icon && (
-                    <div
-                      className="w-5 h-5"
-                      dangerouslySetInnerHTML={{ 
-                        __html: atob(amenitiesList.find(a => a.amenityId === id)!.icon.split(',')[1])
-                          .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
-                      }}
-                    />
-                  )}
-                  <span className="text-sm text-gray-700">{name}</span>
-                </div>
-              </label>
+              </div>
             ))}
           </div>
         </div>

@@ -23,6 +23,7 @@ interface ImageUpload {
 export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: EditHouseFormProps) {
   const [formData, setFormData] = useState<House>({
     ...house,
+    shortDescription: house.shortDescription || '',
     amenities: house.amenities || {}
   })
   const [amenities, setAmenities] = useState<Amenity[]>([])
@@ -57,16 +58,32 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === 'capacity' ? parseInt(value) || 0 : value
     }))
   }
 
-  const handleAmenityToggle = (amenityId: string) => {
+  const handleAmenityChange = (amenityId: string, checked: boolean) => {
     setFormData(prev => ({
       ...prev,
       amenities: {
         ...prev.amenities,
-        [amenityId]: !prev.amenities?.[amenityId]
+        [amenityId]: {
+          available: checked,
+          amount: checked ? (prev.amenities[amenityId]?.amount || 1) : 0
+        }
+      }
+    }))
+  }
+
+  const handleAmountChange = (amenityId: string, value: number) => {
+    setFormData(prev => ({
+      ...prev,
+      amenities: {
+        ...prev.amenities,
+        [amenityId]: {
+          available: prev.amenities[amenityId]?.available ?? false,
+          amount: value
+        }
       }
     }))
   }
@@ -167,6 +184,34 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
                 required
               />
             </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Total Capacity
+              </label>
+              <input
+                type="number"
+                name="capacity"
+                value={formData.capacity}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-md"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Short Description
+              </label>
+              <textarea
+                name="shortDescription"
+                value={formData.shortDescription}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-md"
+                rows={2}
+                required
+              />
+            </div>
           </div>
 
           {/* All Photos Section */}
@@ -240,29 +285,35 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
             </label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {amenities.map((amenity) => (
-                <label
-                  key={amenity.amenityId}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={!!formData.amenities?.[amenity.amenityId]}
-                    onChange={() => handleAmenityToggle(amenity.amenityId)}
-                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                  />
-                  <div className="flex items-center space-x-2">
-                    {amenity.icon && (
-                      <div
-                        className="w-5 h-5"
-                        dangerouslySetInnerHTML={{ 
-                          __html: atob(amenity.icon.split(',')[1])
-                            .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
-                        }}
+                <div key={amenity.amenityId} className="space-y-2">
+                  <label className="flex items-center gap-2">
+                    <div className="flex items-center gap-2">
+                      {amenity.icon && (
+                        <div
+                          className="w-5 h-5"
+                          dangerouslySetInnerHTML={{
+                            __html: atob(amenity.icon.split(',')[1])
+                              .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
+                          }}
+                        />
+                      )}
+                      <input
+                        type="checkbox"
+                        checked={!!formData.amenities[amenity.amenityId]?.available}
+                        onChange={(e) => handleAmenityChange(amenity.amenityId, e.target.checked)}
                       />
-                    )}
-                    <span className="text-sm text-gray-700">{amenity.name}</span>
-                  </div>
-                </label>
+                      <span>{amenity.name}</span>
+                    </div>
+                  </label>
+                  {formData.amenities[amenity.amenityId]?.available && (
+                    <input
+                      type="number"
+                      min="0"
+                      value={formData.amenities[amenity.amenityId].amount}
+                      onChange={(e) => handleAmountChange(amenity.amenityId, parseInt(e.target.value))}
+                    />
+                  )}
+                </div>
               ))}
             </div>
           </div>

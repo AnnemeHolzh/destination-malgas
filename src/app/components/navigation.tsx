@@ -52,7 +52,7 @@ export function Navigation() {
     return addEventListeners({
       'scroll': handleScroll
     })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getComputedStyle, getScrollY])
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getScrollY])
 
   useEffect(() => {
     // Load user from localStorage on mount

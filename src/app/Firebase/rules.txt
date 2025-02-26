@@ -24,6 +24,28 @@
     },
     "houseAvailability": {
       ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+    },
+    "newsletterSubscribers": {
+      ".read": "auth != null",
+      ".write": "newData.exists() || data.exists()",
+      ".indexOn": ["email"],
+      "$subscriberId": {
+        ".validate": "newData.hasChildren(['email', 'subscribedAt'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+\\.[^@]+$/)"
+        },
+        "subscribedAt": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        }
+      }
+    },
+    "messages": {
+      ".read": "auth !== null && root.child('users').child(auth.uid).child('role').val() === 'staff'",
+      ".write": "auth === null", // Allow public writes for contact form
+      "$messageId": {
+        ".write": "auth !== null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+      }
     }
   }
 }
+
