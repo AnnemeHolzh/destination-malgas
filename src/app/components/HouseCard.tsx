@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { House } from '../DataModels/House'
 import { Amenity } from '../DataModels/Amenity'
 import { Bed, Bath, Check, Users } from 'lucide-react'
