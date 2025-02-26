@@ -8,7 +8,6 @@ import logoBlack from "../../../public/Images/Layout/logoBlackTransparent.svg" /
 import logoWhite from "../../../public/Images/Layout/logoWhiteTransparent.svg" // Update with your actual paths
 import { useWindowUtils } from '../hooks/useWindowUtils'
 import { LoginModal } from "./auth/LoginModal"
-import { loginUser } from "../services/authService"
 import { User as UserType } from "../DataModels/User"
 
 export function Navigation() {
