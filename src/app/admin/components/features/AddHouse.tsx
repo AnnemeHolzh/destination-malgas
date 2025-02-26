@@ -1,13 +1,15 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { House } from '../../../DataModels/House';
-import { createHouse, generateHouseId } from '../../../services/houseService';
+import { generateHouseId } from '../../../services/houseService';
 import { UploadProgress, processImage } from '../../../services/imageService';
 import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';
 import { Amenity } from '../../../DataModels/Amenity';
 import Image from 'next/image';
 import { logErrorToFirebase } from '../../../services/errorService';
+import { chunkedDatabaseWrite } from '../../../utils/chunkedUpload';
+import UploadProgressBar from '../../../components/ui/UploadProgressBar';
 
 interface ImageUpload extends UploadProgress {
   file: File;
@@ -32,6 +34,12 @@ export default function AddHouse() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [amenitiesList, setAmenitiesList] = useState<Amenity[]>([]);
+  const [uploadProgress, setUploadProgress] = useState({
+    progress: 0,
+    currentChunk: 0,
+    totalChunks: 0
+  });
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     loadAmenities();
@@ -66,6 +74,7 @@ export default function AddHouse() {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setIsUploading(true);
 
     try {
       // Convert all images to Base64
@@ -82,15 +91,27 @@ export default function AddHouse() {
       const newHouse: House = {
         ...house as House,
         houseId: generateHouseId(),
-        media: {
-          photos: base64Images, // Store Base64 strings directly
-          videos: []
-        },
         createdAt: Date.now(),
         updatedAt: Date.now()
       };
 
-      await createHouse(newHouse);
+      // Calculate total chunks
+      const totalChunks = Math.ceil(base64Images.length / 5);
+      setUploadProgress(prev => ({ ...prev, totalChunks }));
+
+      // Use chunked upload with progress tracking
+      await chunkedDatabaseWrite(
+        `houses/${newHouse.houseId}`,
+        newHouse,
+        base64Images,
+        (progress) => {
+          setUploadProgress({
+            progress: (progress.uploadedImages / progress.totalImages) * 100,
+            currentChunk: progress.currentChunk,
+            totalChunks
+          });
+        }
+      );
       
       // Reset form
       setHouse({
@@ -100,6 +121,7 @@ export default function AddHouse() {
         baths: 0,
         pricePerNight: 0,
         description: '',
+        shortDescription: '',
         media: { photos: [], videos: [] },
         amenities: {},
         active: true,
@@ -112,6 +134,7 @@ export default function AddHouse() {
       await logErrorToFirebase(error, 'AddHouse/handleSubmit');
     } finally {
       setLoading(false);
+      setIsUploading(false);
     }
   };
 
@@ -331,6 +354,16 @@ export default function AddHouse() {
             ))}
           </div>
         </div>
+
+        {isUploading && (
+          <div className="mb-4">
+            <UploadProgressBar 
+              progress={uploadProgress.progress}
+              currentChunk={uploadProgress.currentChunk}
+              totalChunks={uploadProgress.totalChunks}
+            />
+          </div>
+        )}
 
         {/* Submit Button */}
         <div className="flex justify-end">
