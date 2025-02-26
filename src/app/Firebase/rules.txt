@@ -3,12 +3,20 @@
     ".read": true,  // Allow public read access to all data
     "users": {
       "$uid": {
-        ".write": "$uid === auth.uid || (auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff')",
+        ".read": "auth != null && (auth.uid === $uid || root.child('users/'+auth.uid+'/role').val() === 'staff')",
+        ".write": "auth != null && (auth.uid === $uid || root.child('users/'+auth.uid+'/role').val() === 'staff')",
         ".validate": "newData.hasChildren(['email', 'name', 'role'])"
       }
     },
     "houses": {
-      ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'",
+      ".read": "auth != null",
+      ".write": "
+        auth != null && 
+        (
+          root.child('users/'+auth.uid+'/role').val() === 'staff' ||
+          root.child('users').orderByChild('email').equalTo(auth.token.email).limitToFirst(1).val().role === 'staff'
+        )
+      ",
       "$houseId": {
         ".validate": "newData.hasChildren(['name', 'capacity', 'beds', 'baths'])"
       }
@@ -24,6 +32,28 @@
     },
     "houseAvailability": {
       ".write": "auth != null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+    },
+    "newsletterSubscribers": {
+      ".read": "auth != null",
+      ".write": "newData.exists() || data.exists()",
+      ".indexOn": ["email"],
+      "$subscriberId": {
+        ".validate": "newData.hasChildren(['email', 'subscribedAt'])",
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[^@]+@[^@]+\\.[^@]+$/)"
+        },
+        "subscribedAt": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        }
+      }
+    },
+    "messages": {
+      ".read": "auth !== null && root.child('users').child(auth.uid).child('role').val() === 'staff'",
+      ".write": "auth === null", // Allow public writes for contact form
+      "$messageId": {
+        ".write": "auth !== null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
+      }
     }
   }
 }
+

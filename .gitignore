@@ -45,3 +45,5 @@ package-lock.json
 
 .prettierignore
 .eslintcache
+destinationmalgasdb-c1203-firebase-adminsdk-oy1xw-44aff9e790.json
+src/app/Firebase/rules.txt
