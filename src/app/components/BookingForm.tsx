@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { House } from '@/app/DataModels/House'
 import { Input } from '@/app/components/ui/input'
 
@@ -9,6 +10,7 @@ interface BookingFormProps {
 }
 
 export default function BookingForm({ house }: BookingFormProps) {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -21,8 +23,21 @@ export default function BookingForm({ house }: BookingFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle booking submission
-    console.log(formData)
+    
+    // Create query parameters
+    const params = new URLSearchParams({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      arrivalDate: formData.arrivalDate,
+      departureDate: formData.departureDate,
+      adults: formData.adults.toString(),
+      kids: formData.kids.toString(),
+      comments: formData.comments,
+      houseName: house.name
+    })
+
+    // Redirect to contact page with booking details
+    router.push(`/contact-us?${params.toString()}`)
   }
 
   return (
@@ -83,8 +98,7 @@ export default function BookingForm({ house }: BookingFormProps) {
         <div>
           <label className="block text-sm mb-1">Comments</label>
           <textarea
-            className="w-full px-3 py-2 border rounded-md"
-            rows={4}
+            className="w-full px-3 py-2 border rounded-md h-18 resize-none"
             value={formData.comments}
             onChange={(e) => setFormData(prev => ({ ...prev, comments: e.target.value }))}
           />
@@ -97,11 +111,6 @@ export default function BookingForm({ house }: BookingFormProps) {
           Book Now
         </button>
       </form>
-
-      <div className="mt-8 text-center">
-        <h4 className="font-bold mb-2">HAVE ANY QUESTIONS?</h4>
-        <p className="text-xl">000 000 0000</p>
-      </div>
     </div>
   )
 }

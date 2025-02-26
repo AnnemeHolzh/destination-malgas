@@ -4,7 +4,7 @@ import { Button } from "../components/ui/contactButton"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textArea"
 import { useFormStatus } from "react-dom"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { sendEmail } from "../actions/contact"
 import { ref, set } from "firebase/database"
 import { database } from "../Firebase/firebaseConfig.js"
@@ -13,6 +13,66 @@ export default function ContactForm() {
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
   const [showOptions, setShowOptions] = useState(false)
+  const [bookingDetails, setBookingDetails] = useState<{
+    firstName: string
+    lastName: string
+    arrivalDate: string
+    departureDate: string
+    adults: string
+    kids: string
+    comments: string
+    houseName: string
+  } | null>(null)
+
+  useEffect(() => {
+    // Parse booking details from URL
+    const params = new URLSearchParams(window.location.search)
+    if (params.size > 0) {
+      setBookingDetails({
+        firstName: params.get('firstName') ?? '',
+        lastName: params.get('lastName') ?? '',
+        arrivalDate: params.get('arrivalDate') ?? '',
+        departureDate: params.get('departureDate') ?? '',
+        adults: params.get('adults') ?? '1',
+        kids: params.get('kids') ?? '0',
+        comments: params.get('comments') ?? '',
+        houseName: params.get('houseName') ?? ''
+      })
+    }
+  }, [])
+
+  // Modify the form's initial values
+  const getInitialValue = (field: string) => {
+    if (!bookingDetails) return ''
+    
+    switch (field) {
+      case 'name':
+        return `${bookingDetails.firstName} ${bookingDetails.lastName}`
+      case 'subject':
+        return `Booking for ${bookingDetails.houseName} from ${formatDate(bookingDetails.arrivalDate)} to ${formatDate(bookingDetails.departureDate)}`
+      case 'message':
+        return `Booking Details:
+        -------------------------
+        House: ${bookingDetails.houseName}
+        Dates: ${formatDate(bookingDetails.arrivalDate)} - ${formatDate(bookingDetails.departureDate)}
+        Guests: ${bookingDetails.adults} adults, ${bookingDetails.kids} kids
+        -------------------------
+        Additional Notes:
+        ${bookingDetails.comments}
+        `
+      default:
+        return ''
+    }
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault() // Prevent form from submitting and clearing
@@ -94,6 +154,7 @@ export default function ContactForm() {
             placeholder="Full Name" 
             required 
             className="bg-gray-100 border-0" 
+            defaultValue={getInitialValue('name')}
           />
           <Input 
             name="email" 
@@ -114,6 +175,7 @@ export default function ContactForm() {
             placeholder="Subject" 
             required 
             className="bg-gray-100 border-0" 
+            defaultValue={getInitialValue('subject')}
           />
         </div>
 
@@ -122,6 +184,7 @@ export default function ContactForm() {
           placeholder="Write a Message"
           required
           className="bg-gray-100 border-0 min-h-[200px]"
+          defaultValue={getInitialValue('message')}
         />
 
         <div className="text-center">
