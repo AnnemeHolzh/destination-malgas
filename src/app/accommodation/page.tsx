@@ -99,7 +99,7 @@ export default function Accommodations() {
 
     const matchesBeds = house.beds >= minBeds
     const matchesBaths = house.baths >= minBaths
-    const matchesGuests = (house.capacity.adults + house.capacity.children) >= guestCount
+    const matchesGuests = house.capacity >= guestCount
     const matchesAmenities = selectedAmenities.length > 0 ? 
       selectedAmenities.every(amenityId => house.amenities[amenityId]) : 
       true
