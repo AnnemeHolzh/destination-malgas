@@ -61,7 +61,7 @@ export default async function HousePage({
 
         {/* Amenities Grid */}
         <div className="mb-8 mt-12 flex justify-center">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8 max-w-4xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 w-full max-w-6xl px-4">
             {/* Beds Info */}
             <div className="flex flex-col items-center text-center">
               <div className="w-8 h-8 mb-2">

@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { House } from '../DataModels/House'
 import { Amenity } from '../DataModels/Amenity'
-import { Bed, Bath, Check } from 'lucide-react'
+import { Bed, Bath, Check, Users } from 'lucide-react'
 import Image from 'next/image'
 import CustomButton from '@/app/components/ui/button'
 import Link from 'next/link'
@@ -13,6 +13,7 @@ interface HouseCardProps {
 
 const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
+  const [imageLoaded, setImageLoaded] = useState(false)
   
   // Get first two available amenities
   const firstTwoAmenities = Object.entries(house.amenities)
@@ -22,7 +23,7 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
     .filter(Boolean) as Amenity[]
 
   // Extract first sentence of description
-  const shortDescription = house.description.split('.')[0] + (house.description.includes('.') ? '.' : '')
+  const shortDescription = house.shortDescription || '';
 
   return (
     <Link href={`/accommodation/${house.houseId}`}>
@@ -33,14 +34,23 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
       >
         {/* Image Container */}
         <div className="relative pt-[56.25%]">
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+          )}
+          
           {house.media.photos[0] && (
             <>
               <Image
-                src={`data:image/jpeg;base64,${house.media.photos[0]}`}
+                src={`data:image/webp;base64,${house.media.photos[0]}`}
                 alt={house.name}
                 fill
-                className="object-cover absolute top-0 left-0 w-full h-full transition-all duration-300 group-hover:blur-sm"
-                loading="lazy"
+                className={`object-cover absolute top-0 left-0 w-full h-full transition-all duration-300 group-hover:blur-sm ${
+                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                }`}
+                priority
+                loading="eager"
+                onLoadingComplete={() => setImageLoaded(true)}
+                quality={75}
               />
               {/* Default Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -87,6 +97,10 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
                     <Bath className="w-5 h-5" />
                     <span>{house.baths}</span>
                   </div>
+                  <div className="flex items-center gap-2">
+                    <Users className="w-5 h-5" />
+                    <span>{house.capacity}</span>
+                  </div>
                 </div>
 
                 {/* Amenities */}
@@ -98,6 +112,10 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
                         dangerouslySetInnerHTML={{ 
                           __html: Buffer.from(amenity.icon.split(',')[1], 'base64').toString()
                             .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
+                            .replace(/<path/g, '<path fill="white"')
+                            .replace(/<circle/g, '<circle fill="white"')
+                            .replace(/<rect/g, '<rect fill="white"')
+                            .replace(/<polygon/g, '<polygon fill="white"')
                         }}
                       />
                       <Check className="w-4 h-4 text-green-400" />
