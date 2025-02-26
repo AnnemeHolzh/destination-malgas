@@ -1,6 +1,7 @@
 import { ref, query, orderByChild, equalTo, get, set } from "firebase/database"
 import { database } from "../Firebase/firebaseConfig"
 import type { NewsletterSubscriber } from "../DataModels/NewsletterSubscriber"
+import { logErrorToFirebase } from './errorService'
 
 export async function createNewsletterSubscriber(email: string): Promise<string> {
   try {
@@ -25,6 +26,7 @@ export async function createNewsletterSubscriber(email: string): Promise<string>
     return newSubRef.key!
   } catch (error) {
     console.error('Error creating subscriber:', error)
+    await logErrorToFirebase(error, 'createNewsletterSubscriber', { email });
     throw error
   }
 }
@@ -55,6 +57,7 @@ export async function getAllNewsletterSubscribers(): Promise<NewsletterSubscribe
     return subscribers
   } catch (error) {
     console.error('Error getting subscribers:', error)
+    await logErrorToFirebase(error, 'getAllNewsletterSubscribers');
     throw error
   }
 } 

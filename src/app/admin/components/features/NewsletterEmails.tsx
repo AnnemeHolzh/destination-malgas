@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { Copy, ClipboardList } from 'lucide-react'
 import { NewsletterSubscriber } from '../../../DataModels/NewsletterSubscriber'
 import { getAllNewsletterSubscribers } from '../../../services/newsletterService'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 export default function NewsletterEmails() {
   const [subscribers, setSubscribers] = useState<NewsletterSubscriber[]>([])
@@ -16,6 +17,7 @@ export default function NewsletterEmails() {
         setSubscribers(data)
       } catch (err) {
         console.error('Failed to load subscribers:', err)
+        await logErrorToFirebase(err, 'NewsletterEmails/loadSubscribers');
       } finally {
         setLoading(false)
       }
@@ -28,6 +30,7 @@ export default function NewsletterEmails() {
     try {
       await navigator.clipboard.writeText(text)
     } catch (err) {
+      await logErrorToFirebase(err, 'NewsletterEmails/copyToClipboard');
       console.error('Failed to copy text:', err)
     }
   }

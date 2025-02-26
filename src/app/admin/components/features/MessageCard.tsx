@@ -5,6 +5,7 @@ import { update } from "firebase/database";
 import { Eye, EyeOff } from "lucide-react";
 import { ref } from "firebase/database";
 import { database } from "../../../Firebase/firebaseConfig";
+import { logErrorToFirebase } from '../../../services/errorService'
 
 interface MessageCardProps {
   message: {
@@ -36,6 +37,7 @@ export function MessageCard({ message, onUpdate }: MessageCardProps) {
       onUpdate();
     } catch (error) {
       console.error("Error updating message:", error);
+      await logErrorToFirebase(error, 'MessageCard/handleMarkViewed');
     }
   };
 
