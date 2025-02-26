@@ -5,6 +5,7 @@ import { UserPlus, Loader2 } from 'lucide-react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { ref, set } from 'firebase/database'
 import { auth, database } from '../../../Firebase/firebaseConfig'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 interface StaffUserForm {
   firstName: string
@@ -87,6 +88,10 @@ export default function AddStaffUser() {
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create user');
+      await logErrorToFirebase(err, 'AddStaffUser/handleSubmit', {
+        formData,
+        isStaff: true
+      });
     } finally {
       setLoading(false);
     }

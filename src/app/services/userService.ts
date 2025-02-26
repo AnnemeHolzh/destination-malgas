@@ -2,6 +2,7 @@ import { ref, set, get, update, remove } from "firebase/database";
 import type { User } from "../DataModels/User";
 import { database } from "../Firebase/firebaseConfig";
 import bcrypt from "bcryptjs";
+import { logErrorToFirebase } from './errorService';
 
 // Create a new user
 export async function createUser(user: User): Promise<void> {
@@ -9,6 +10,7 @@ export async function createUser(user: User): Promise<void> {
     await set(ref(database, `users/${user.uid}`), user);
   } catch (error) {
     console.error('Error creating user:', error);
+    await logErrorToFirebase(error, 'createUser', { userId: user.uid });
     throw error;
   }
 }
@@ -20,6 +22,7 @@ export async function getUser(uid: string): Promise<User | null> {
     return snapshot.exists() ? snapshot.val() as User : null;
   } catch (error) {
     console.error('Error getting user:', error);
+    await logErrorToFirebase(error, 'getUser', { userId: uid });
     throw error;
   }
 }
@@ -37,6 +40,7 @@ export async function getAllUsers(): Promise<User[]> {
     return users;
   } catch (error) {
     console.error('Error getting all users:', error);
+    await logErrorToFirebase(error, 'getAllUsers');
     throw error;
   }
 }
@@ -47,6 +51,7 @@ export async function updateUser(uid: string, updates: Partial<User>): Promise<v
     await update(ref(database, `users/${uid}`), updates);
   } catch (error) {
     console.error('Error updating user:', error);
+    await logErrorToFirebase(error, 'updateUser', { userId: uid });
     throw error;
   }
 }
@@ -57,6 +62,7 @@ export async function deleteUser(uid: string): Promise<void> {
     await remove(ref(database, `users/${uid}`));
   } catch (error) {
     console.error('Error deleting user:', error);
+    await logErrorToFirebase(error, 'deleteUser', { userId: uid });
     throw error;
   }
 }

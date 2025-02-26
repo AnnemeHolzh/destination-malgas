@@ -12,6 +12,7 @@ import MyProfile from './components/features/MyProfile'
 import NewsletterEmails from './components/features/NewsletterEmails'
 import ManageAmenities from './components/features/ManageAmenities'
 import Messages from './components/features/Messages'
+import ErrorLogs from './components/features/ErrorLogs'
 import { ArrowLeft } from 'lucide-react'
 import { auth, database } from '../Firebase/firebaseConfig'
 import { ref, get } from 'firebase/database'
@@ -56,6 +57,7 @@ function AdminDashboard() {
     manageAmenities: <ManageAmenities />,
     newsletterEmails: <NewsletterEmails />,
     messages: <Messages />,
+    errorLogs: <ErrorLogs />,
   }
 
 

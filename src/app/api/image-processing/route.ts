@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { logErrorToFirebase } from '../../services/errorService'
 
 export async function POST(request: Request) {
   try {
@@ -29,6 +30,9 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('Error processing SVG:', error)
+    await logErrorToFirebase(error, 'API/image-processing', {
+      requestHeaders: request.headers
+    })
     return NextResponse.json(
       { error: 'Failed to process SVG file' },
       { status: 500 }

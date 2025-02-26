@@ -4,6 +4,7 @@ export interface House {
     capacity: number;
     beds: number;
     baths: number;
+    pricePerNight: number;
     description: string;
     shortDescription: string;
     media: {

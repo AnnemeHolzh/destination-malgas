@@ -1,4 +1,4 @@
-import { Home, Plus, User, Mail, MessageCircle } from 'lucide-react'
+import { Home, Plus, User, Mail, MessageCircle, AlertCircle } from 'lucide-react'
 
 interface AdminSidebarProps {
   activeFeature: string
@@ -16,8 +16,8 @@ const AdminSidebar = ({ activeFeature, setActiveFeature }: AdminSidebarProps) =>
     { id: 'manageAmenities', label: 'Manage Amenities', icon: Home },
     { id: 'newsletterEmails', label: 'Newsletter Emails', icon: Mail },
     { id: 'messages', label: 'Messages', icon: MessageCircle },
+    { id: 'errorLogs', label: 'Error Logs', icon: AlertCircle },
   ]
-
 
   return (
     <aside className="w-64 bg-white shadow-lg">
