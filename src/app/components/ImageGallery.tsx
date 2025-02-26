@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -14,32 +14,31 @@ interface ImageGalleryProps {
 export default function ImageGallery({ images, isOpen, onClose, startIndex = 0 }: ImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(startIndex)
 
-  // Handle keyboard navigation
+  // Declare handlers first
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev + 1) % images.length)
+  }, [images.length])
+
+  const handlePrevious = useCallback(() => {
+    setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
+  }, [images.length])
+
+  // Then use them in useEffect
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return
-      
       if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowLeft') handlePrevious()
       if (e.key === 'ArrowRight') handleNext()
+      if (e.key === 'ArrowLeft') handlePrevious()
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, currentIndex])
+  }, [handleNext, handlePrevious, onClose])
 
   // Reset index when modal opens
   useEffect(() => {
     if (isOpen) setCurrentIndex(startIndex)
   }, [isOpen, startIndex])
-
-  const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1))
-  }
-
-  const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1))
-  }
 
   if (!isOpen) return null
 
