@@ -6,11 +6,15 @@ import BookingForm from '@/app/components/BookingForm'
 import ImageGalleryWrapper from '@/app/components/ImageGalleryWrapper'
 import { parseDescription } from '@/utils/parseDescription'
 
+interface PageProps {
+  params: {
+    houseId: string
+  }
+}
+
 export default async function HousePage({
   params,
-}: {
-  params: { houseId: string }
-}) {
+}: PageProps) {
   const [house, amenities] = await Promise.all([
     getHouseById(params.houseId),
     getAllAmenities()
