@@ -7,6 +7,7 @@ import { getAllAmenities } from '../../../services/amenityService'
 import { X, Upload, Trash2 } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 interface EditHouseFormProps {
   house: House
@@ -37,7 +38,8 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       try {
         const amenitiesList = await getAllAmenities()
         setAmenities(amenitiesList)
-      } catch {
+      } catch (error) {
+        await logErrorToFirebase(error, 'EditHouseForm/loadAmenities');
         setError('Failed to load amenities')
       }
     }
@@ -132,6 +134,7 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       await onUpdate(updatedHouse)
     } catch {
       setError('Failed to update house')
+      await logErrorToFirebase(error, 'EditHouseForm/handleSubmit');
     } finally {
       setLoading(false)
     }

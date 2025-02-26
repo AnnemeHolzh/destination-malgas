@@ -6,6 +6,7 @@ import { House } from '../../../DataModels/House'
 import { Check, Edit, Trash2, MoreVertical } from 'lucide-react'
 import Image from 'next/image'
 import EditHouseForm from './EditHouseForm'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 function ConfirmationModal({ isOpen, onClose, onConfirm }: { 
   isOpen: boolean, 
@@ -67,6 +68,7 @@ export default function ManageHouses() {
       } catch (err) {
         setError('Failed to fetch houses')
         console.error(err)
+        await logErrorToFirebase(err, 'ManageHouses/fetchHouses');
       } finally {
         setLoading(false)
       }
@@ -81,8 +83,9 @@ export default function ManageHouses() {
       setHouses(prev => prev.map(house => 
         house.houseId === houseId ? { ...house, active: !isActive } : house
       ))
-    } catch {
+    } catch (error) {
       setError('Failed to update house status')
+      await logErrorToFirebase(error, 'ManageHouses/handleActiveToggle');
     }
   }
 
@@ -94,8 +97,9 @@ export default function ManageHouses() {
       setHouses(prev => prev.filter(house => house.houseId !== selectedHouse.houseId))
       setIsDeleteModalOpen(false)
       setSelectedHouse(null)
-    } catch {
+    } catch (error) {
       setError('Failed to delete house')
+      await logErrorToFirebase(error, 'ManageHouses/handleDelete');
     }
   }
 
@@ -107,8 +111,9 @@ export default function ManageHouses() {
       ))
       setIsEditModalOpen(false)
       setSelectedHouse(null)
-    } catch {
+    } catch (error) {
       setError('Failed to update house')
+      await logErrorToFirebase(error, 'ManageHouses/handleUpdate');
     }
   }
 

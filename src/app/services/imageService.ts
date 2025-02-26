@@ -2,6 +2,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../Firebase/firebaseConfig';
 import { convertToWebP } from '../utils/imageProcessing';
 import { convertToBase64WebP } from '../utils/imageProcessing';
+import { logErrorToFirebase } from './errorService';
 
 export interface UploadProgress { 
   progress: number;
@@ -39,6 +40,7 @@ export async function uploadImage(
       );
     });
   } catch (error) {
+    await logErrorToFirebase(error, 'uploadImage', { file, path });
     throw error;
   }
 } 
@@ -67,6 +69,7 @@ export async function processImage(
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     onProgress?.({ progress: 0, error: errorMessage });
+    await logErrorToFirebase(error, 'processImage', { file });
     throw error;
   }
 }

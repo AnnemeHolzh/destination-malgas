@@ -7,6 +7,7 @@ import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';
 import { Amenity } from '../../../DataModels/Amenity';
 import Image from 'next/image';
+import { logErrorToFirebase } from '../../../services/errorService';
 
 interface ImageUpload extends UploadProgress {
   file: File;
@@ -40,7 +41,8 @@ export default function AddHouse() {
     try {
       const amenitiesList = await getAllAmenities();
       setAmenitiesList(amenitiesList);
-    } catch {
+    } catch (error) {
+      await logErrorToFirebase(error, 'AddHouse/loadAmenities');
       setError('Failed to load amenities');
     }
   };
@@ -107,6 +109,7 @@ export default function AddHouse() {
     } catch (error) {
       console.error('Error creating house:', error);
       setError('Failed to create house. Please try again.');
+      await logErrorToFirebase(error, 'AddHouse/handleSubmit');
     } finally {
       setLoading(false);
     }

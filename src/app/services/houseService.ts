@@ -1,6 +1,7 @@
 import { ref, set, get, update, remove } from "firebase/database";
 import type { House } from "../DataModels/House";
 import { database, auth } from "../Firebase/firebaseConfig";
+import { logErrorToFirebase } from './errorService';
 
 // Create a new house
 export async function createHouse(house: House): Promise<void> {
@@ -19,6 +20,10 @@ export async function createHouse(house: House): Promise<void> {
     await set(ref(database, `houses/${house.houseId}`), house);
   } catch (error) {
     console.error('Error creating house:', error);
+    await logErrorToFirebase(error, 'createHouse', {
+      houseId: house.houseId,
+      user: auth.currentUser?.uid
+    });
     throw error;
   }
 }
@@ -31,6 +36,7 @@ export async function getHouse(houseId: string): Promise<House | null> {
     return snapshot.exists() ? snapshot.val() as House : null;
   } catch (error) {
     console.error('Error getting house:', error);
+    await logErrorToFirebase(error, 'getHouse', { houseId }); // Added Firebase error logging
     throw error;
   }
 }
@@ -49,6 +55,7 @@ export async function getAllHouses(): Promise<House[]> {
     return houses;
   } catch (error) {
     console.error('Error getting all houses:', error);
+    await logErrorToFirebase(error, 'getAllHouses');
     throw error;
   }
 }
@@ -60,6 +67,7 @@ export async function updateHouse(houseId: string, updates: Partial<House>): Pro
     await update(ref(db, `houses/${houseId}`), updates);
   } catch (error) {
     console.error('Error updating house:', error);
+    await logErrorToFirebase(error, 'updateHouse', { houseId });
     throw error;
   }
 }   
@@ -71,6 +79,7 @@ export async function deleteHouse(houseId: string): Promise<void> {
     await remove(ref(db, `houses/${houseId}`));
   } catch (error) {
     console.error('Error deleting house:', error);
+    await logErrorToFirebase(error, 'deleteHouse', { houseId });
     throw error;
   }
 }

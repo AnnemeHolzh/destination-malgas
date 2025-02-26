@@ -4,6 +4,7 @@ import { User } from "../DataModels/User"
 import bcrypt from "bcryptjs"
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth"
 import { auth } from "../Firebase/firebaseConfig"
+import { logErrorToFirebase } from './errorService'
 
 const SALT_ROUNDS = 12
 const MAX_LOGIN_ATTEMPTS = 5
@@ -49,6 +50,10 @@ export async function loginUser(email: string, password: string): Promise<User> 
     
     return snapshot.val();
   } catch (authError) {
+    await logErrorToFirebase(authError, 'loginUser', {
+      email: normalizedEmail,
+      isLegacyFallback: false
+    });
     // Fallback to legacy login
     console.log(authError)
     const snapshot = await get(ref(database, 'users'));
