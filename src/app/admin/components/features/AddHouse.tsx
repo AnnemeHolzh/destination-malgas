@@ -19,6 +19,7 @@ export default function AddHouse() {
     capacity: 0,
     beds: 0,
     baths: 0,
+    pricePerNight: 0,
     description: '',
     shortDescription: '',
     media: { photos: [], videos: [] },
@@ -95,6 +96,7 @@ export default function AddHouse() {
         capacity: 0,
         beds: 0,
         baths: 0,
+        pricePerNight: 0,
         description: '',
         media: { photos: [], videos: [] },
         amenities: {},
@@ -154,6 +156,21 @@ export default function AddHouse() {
                 onChange={e => setHouse(prev => ({
                   ...prev,
                   capacity: parseInt(e.target.value) || 0
+                }))}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Price Per Night ($)</label>
+              <input
+                type="number"
+                min="0"
+                required
+                value={house.pricePerNight || 0}
+                onChange={e => setHouse(prev => ({
+                  ...prev,
+                  pricePerNight: parseFloat(e.target.value) || 0
                 }))}
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />

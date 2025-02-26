@@ -142,6 +142,7 @@ export default function ManageHouses() {
               </div>
               <div>
                 <h3 className="font-semibold">{house.name}</h3>
+                <p className="text-sm text-gray-600">${house.pricePerNight}/night</p>
               </div>
             </div>
 
