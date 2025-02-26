@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { House } from '../../../DataModels/House';
-import { createHouse, generateHouseId } from '../../../services/houseService';
+import { generateHouseId } from '../../../services/houseService';
 import { UploadProgress, processImage } from '../../../services/imageService';
 import { getAllAmenities } from '../../../services/amenityService';
 import { X, Upload } from 'lucide-react';

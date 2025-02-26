@@ -15,7 +15,7 @@ interface UploadProgress {
 
 export async function chunkedDatabaseWrite(
   path: string, 
-  data: any, 
+  data: object,  
   imageArray: string[],
   onProgress?: (progress: UploadProgress) => void
 ) {

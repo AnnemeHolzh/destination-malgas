@@ -1,6 +1,5 @@
 import { House } from "@/app/DataModels/House";
 
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export const cache = {
   get: (key: string) => {
@@ -13,11 +12,14 @@ export const cache = {
     }
   },
   
-  set: (key: string, data: any) => {
+  set: (key: string, data: unknown) => {
     try {
       // For houses, strip out the images before caching
       if (key === 'houses') {
-        const housesWithoutImages = data.map((house: House) => ({
+        if (!Array.isArray(data)) return;
+        const housesData = data as House[];
+        
+        const housesWithoutImages = housesData.map((house: House) => ({
           ...house,
           media: {
             ...house.media,
