@@ -141,7 +141,7 @@ export function HeroCarousel() {
               {currentItem.description}
             </p>
             <div className={`self-start mt-4 ${window.innerWidth < 768 ? 'flex justify-center' : ''}`}>
-              <CustomButton text="Contact Us" />
+                <CustomButton>Contact Us</CustomButton>
             </div>
           </div>
 
