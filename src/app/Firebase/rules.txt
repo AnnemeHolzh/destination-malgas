@@ -53,6 +53,31 @@
       "$messageId": {
         ".write": "auth !== null && root.child('users').child(auth.uid).child('role').val() === 'staff'"
       }
+    },
+    "errorLogs": {
+      ".read": "auth != null && root.child('users/'+auth.uid+'/role').val() === 'staff'",
+      ".write": "auth != null",
+      "$errorId": {
+        ".validate": "newData.hasChildren(['timestamp', 'errorMessage', 'location'])",
+        "timestamp": {
+          ".validate": "newData.isNumber() && newData.val() <= now"
+        },
+        "errorMessage": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "userId": {
+          ".validate": "newData.val() == null || newData.isString()"
+        },
+        "location": {
+          ".validate": "newData.isString() && newData.val().length > 0"
+        },
+        "stackTrace": {
+          ".validate": "newData.val() == null || newData.isString()"
+        },
+        "additionalData": {
+          ".validate": "newData.val() == null || newData.isObject()"
+        }
+      }
     }
   }
 }

@@ -7,6 +7,7 @@ import { getAllAmenities } from '../../../services/amenityService'
 import { X, Upload, Trash2 } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 interface EditHouseFormProps {
   house: House
@@ -24,7 +25,8 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
   const [formData, setFormData] = useState<House>({
     ...house,
     shortDescription: house.shortDescription || '',
-    amenities: house.amenities || {}
+    amenities: house.amenities || {},
+    pricePerNight: house.pricePerNight || 0,
   })
   const [amenities, setAmenities] = useState<Amenity[]>([])
   const [newImages, setNewImages] = useState<ImageUpload[]>([])
@@ -36,7 +38,8 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       try {
         const amenitiesList = await getAllAmenities()
         setAmenities(amenitiesList)
-      } catch {
+      } catch (error) {
+        await logErrorToFirebase(error, 'EditHouseForm/loadAmenities');
         setError('Failed to load amenities')
       }
     }
@@ -131,6 +134,7 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
       await onUpdate(updatedHouse)
     } catch {
       setError('Failed to update house')
+      await logErrorToFirebase(error, 'EditHouseForm/handleSubmit');
     } finally {
       setLoading(false)
     }
@@ -209,6 +213,21 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border rounded-md"
                 rows={2}
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Price Per Night ($)
+              </label>
+              <input
+                type="number"
+                name="pricePerNight"
+                min="0"
+                value={formData.pricePerNight}
+                onChange={handleInputChange}
+                className="w-full px-3 py-2 border rounded-md"
                 required
               />
             </div>

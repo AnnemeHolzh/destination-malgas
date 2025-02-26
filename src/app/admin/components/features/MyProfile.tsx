@@ -5,6 +5,7 @@ import { User } from '../../../DataModels/User'
 import { updateUser } from '../../../services/userService'
 import { Loader2, Lock, CheckCircle } from 'lucide-react'
 import bcrypt from 'bcryptjs'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 export default function MyProfile() {
   const [currentUser, setCurrentUser] = useState<User | null>(null)
@@ -99,6 +100,7 @@ export default function MyProfile() {
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update profile')
+      await logErrorToFirebase(err, 'MyProfile/handleSubmit');
     } finally {
       setLoading(false)
     }

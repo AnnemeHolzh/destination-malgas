@@ -6,6 +6,7 @@ import { generateAmenityId, createAmenity } from '../../../services/amenityServi
 import { processSvg } from '../../../utils/imageProcessing'
 import { Upload } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 function ErrorFallback({ error, resetErrorBoundary }: { error: Error; resetErrorBoundary: () => void }) {
   return (
@@ -36,6 +37,9 @@ export default function AddAmenity() {
       setIcon(svg)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to process SVG')
+      await logErrorToFirebase(err, 'AddAmenity/onDrop', {
+        error: err instanceof Error ? err.message : 'Failed to process SVG'
+      });
     }
   }
 
@@ -71,6 +75,9 @@ export default function AddAmenity() {
       setIcon(null)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create amenity')
+      await logErrorToFirebase(err, 'AddAmenity/handleSubmit', {
+        error: err instanceof Error ? err.message : 'Failed to create amenity'
+      });
     } finally {
       setLoading(false)
     }

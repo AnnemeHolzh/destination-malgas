@@ -6,6 +6,7 @@ import { getAllAmenities, updateAmenity } from '../../../services/amenityService
 import { Edit, X, Upload } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import { processSvg } from '../../../utils/imageProcessing'
+import { logErrorToFirebase } from '../../../services/errorService'
 
 interface EditAmenityModalProps {
   amenity: Amenity
@@ -28,6 +29,9 @@ function EditAmenityModal({ amenity, isOpen, onClose, onUpdate }: EditAmenityMod
       const svg = await processSvg(file)
       setFormData(prev => ({ ...prev, icon: svg }))
     } catch (err) {
+      await logErrorToFirebase(err, 'EditAmenityModal/onDrop', {
+        error: err instanceof Error ? err.message : 'Failed to process SVG'
+      });
       setError(err instanceof Error ? err.message : 'Failed to process SVG')
     }
   }
@@ -51,6 +55,9 @@ function EditAmenityModal({ amenity, isOpen, onClose, onUpdate }: EditAmenityMod
       onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update amenity')
+      await logErrorToFirebase(err, 'EditAmenityModal/handleSubmit', {
+        error: err instanceof Error ? err.message : 'Failed to update amenity'
+      });
     } finally {
       setLoading(false)
     }
