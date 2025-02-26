@@ -8,7 +8,6 @@ import logoBlack from "../../../public/Images/Layout/logoBlackTransparent.svg" /
 import logoWhite from "../../../public/Images/Layout/logoWhiteTransparent.svg" // Update with your actual paths
 import { useWindowUtils } from '../hooks/useWindowUtils'
 import { LoginModal } from "./auth/LoginModal"
-import { loginUser } from "../services/authService"
 import { User as UserType } from "../DataModels/User"
 
 export function Navigation() {
@@ -52,7 +51,7 @@ export function Navigation() {
     return addEventListeners({
       'scroll': handleScroll
     })
-  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getComputedStyle, getScrollY])
+  }, [isMounted, lastScrollY, isHovering, isMobileMenuOpen, useDarkLogo, addEventListeners, getScrollY])
 
   useEffect(() => {
     // Load user from localStorage on mount
@@ -83,14 +82,9 @@ export function Navigation() {
     ...(currentUser?.role === 'staff' ? [{ name: "ADMIN DASHBOARD", href: "/admin" }] : []),
   ]
 
-  const handleLogin = async (email: string, password: string) => {
-    try {
-      const user = await loginUser(email, password)
-      setCurrentUser(user)
-      setIsLoginModalOpen(false)
-    } catch (error) {
-      throw error
-    }
+  const handleLogin = (user: UserType) => {
+    setCurrentUser(user)
+    setIsLoginModalOpen(false)
   }
 
   return (

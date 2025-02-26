@@ -1,19 +1,17 @@
- export interface House {
+export interface House {
     houseId: string;
     name: string;
-    capacity: {
-      adults: number;
-      children: number;
-    };
+    capacity: number;
     beds: number;
     baths: number;
     description: string;
+    shortDescription: string;
     media: {
       photos: string[];
       videos: string[];
     };
-    amenities: Record<string, boolean>;
+    amenities: Record<string, { available: boolean; amount: number }>;
     active: boolean;
     createdAt: number;
     updatedAt: number;
-  }
+}

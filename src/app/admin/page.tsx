@@ -2,14 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { User } from '../DataModels/User'
 import AdminSidebar from './components/AdminSidebar'
 import AddHouse from './components/features/AddHouse'
 import AddAmenity from './components/features/AddAmenity'
 import AddStaffUser from './components/features/AddStaffUser'
 import ManageHouses from './components/features/ManageHouses'
 import SendNewsletter from './components/features/SendNewsletter'
+import MyProfile from './components/features/MyProfile'
+import NewsletterEmails from './components/features/NewsletterEmails'
+import ManageAmenities from './components/features/ManageAmenities'
+import Messages from './components/features/Messages'
 import { ArrowLeft } from 'lucide-react'
+import { auth, database } from '../Firebase/firebaseConfig'
+import { ref, get } from 'firebase/database'
 
 function AdminDashboard() {
   const [activeFeature, setActiveFeature] = useState<string>('addHouse')
@@ -21,13 +26,23 @@ function AdminDashboard() {
   }, [])
 
   useEffect(() => {
-    if (mounted) {
-      const currentUser: User | null = JSON.parse(localStorage.getItem('currentUser') || 'null')
-      if (!currentUser || currentUser.role !== 'staff') {
-        router.push('/')
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if (!user) {
+        router.push('/admin/login');
+        return;
       }
-    }
-  }, [mounted, router])
+      
+      // Verify user role
+      const userRef = ref(database, `users/${user.uid}`);
+      const snapshot = await get(userRef);
+      if (!snapshot.exists() || snapshot.val().role !== 'staff') {
+        auth.signOut();
+        router.push('/');
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router]);
 
   if (!mounted) return null
 
@@ -36,7 +51,11 @@ function AdminDashboard() {
     addAmenity: <AddAmenity />,
     addStaffUser: <AddStaffUser />,
     manageHouses: <ManageHouses />,
-    sendNewsletter: <SendNewsletter />
+    sendNewsletter: <SendNewsletter />,
+    myProfile: <MyProfile />,
+    manageAmenities: <ManageAmenities />,
+    newsletterEmails: <NewsletterEmails />,
+    messages: <Messages />,
   }
 
 

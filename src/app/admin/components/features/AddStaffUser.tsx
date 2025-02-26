@@ -2,15 +2,16 @@
 
 import { useState } from 'react'
 import { UserPlus, Loader2 } from 'lucide-react'
-import { createUser } from '../../../services/userService'
-import bcrypt from 'bcryptjs'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { ref, set } from 'firebase/database'
+import { auth, database } from '../../../Firebase/firebaseConfig'
 
 interface StaffUserForm {
   firstName: string
   lastName: string
   email: string
   password: string
-  role: 'staff' | 'user'
+  role: "staff" | "user"
 }
 
 export default function AddStaffUser() {
@@ -56,35 +57,38 @@ export default function AddStaffUser() {
     setLoading(true)
 
     try {
-      // Hash password before storing
-      const salt = await bcrypt.genSalt(10)
-      const hashedPassword = await bcrypt.hash(formData.password, salt)
+      // First create Firebase Auth user
+      const { user: authUser } = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
 
+      // Then create database user record
       const newUser = {
-        uid: crypto.randomUUID(),
+        uid: authUser.uid, // Use the Firebase Auth UID
         name: `${formData.firstName} ${formData.lastName}`,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        password: hashedPassword,
-        role: formData.role,
+        role: 'staff',
         createdAt: Date.now(),
         active: true
-      }
+      };
 
-      await createUser(newUser)
-      setSuccess('Staff user created successfully!')
+      await set(ref(database, `users/${authUser.uid}`), newUser);
+      setSuccess('Staff user created successfully!');
       setFormData({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         role: 'staff'
-      })
+      });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to create user')
+      setError(err instanceof Error ? err.message : 'Failed to create user');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 

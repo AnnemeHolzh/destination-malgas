@@ -6,6 +6,8 @@ import { Textarea } from "../components/ui/textArea"
 import { useFormStatus } from "react-dom"
 import { useState } from "react"
 import { sendEmail } from "../actions/contact"
+import { ref, set } from "firebase/database"
+import { database } from "../Firebase/firebaseConfig.js"
 
 export default function ContactForm() {
   const [message, setMessage] = useState("")
@@ -57,6 +59,26 @@ export default function ContactForm() {
     // Show options without resetting form
     setShowOptions(true)
     setMessage("Please choose how you'd like to send your message:")
+
+    // After successful validation
+    try {
+      const messageRef = ref(database, 'messages/' + Math.random().toString(36).substr(2, 9));
+      await set(messageRef, {
+        fullName: name,
+        email,
+        phoneNumber: phone,
+        subject,
+        message: messageText,
+        timestamp: Date.now(),
+        viewed: false
+      });
+      
+      // Show options without resetting form
+      setShowOptions(true);
+      setMessage("Please choose how you'd like to send your message:");
+    } catch {
+      setError("Failed to save message. Please try again.");
+    }
   }
 
   return (

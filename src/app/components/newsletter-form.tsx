@@ -2,20 +2,27 @@
 
 import { useState } from "react"
 import { Send } from "lucide-react"
+import { createNewsletterSubscriber } from "../services/newsletterService"
 
 export default function NewsletterForm() {
   const [email, setEmail] = useState("")
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+  const [message, setMessage] = useState("")
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setStatus("loading")
+    setMessage("")
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    setStatus("success")
-    setEmail("")
+    try {
+      await createNewsletterSubscriber(email)
+      setStatus("success")
+      setMessage("Thank you for subscribing!")
+      setEmail("")
+    } catch (err) {
+      setStatus("error")
+      setMessage(err instanceof Error ? err.message : 'Subscription failed. Please try again.')
+    }
   }
 
   return (
@@ -57,6 +64,14 @@ export default function NewsletterForm() {
         </form>
 
         {status === "success" && <p className="text-green-400 mt-2">Thanks for subscribing!</p>}
+
+        {message && (
+          <p className={`mt-4 text-sm ${
+            status === 'success' ? 'text-green-500' : 'text-red-500'
+          }`}>
+            {message}
+          </p>
+        )}
       </div>
     </div>
   )

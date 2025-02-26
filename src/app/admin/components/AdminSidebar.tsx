@@ -1,4 +1,4 @@
-import { Home, Plus, User, Mail } from 'lucide-react'
+import { Home, Plus, User, Mail, MessageCircle } from 'lucide-react'
 
 interface AdminSidebarProps {
   activeFeature: string
@@ -12,6 +12,10 @@ const AdminSidebar = ({ activeFeature, setActiveFeature }: AdminSidebarProps) =>
     { id: 'addStaffUser', label: 'Add Staff User', icon: User },
     { id: 'manageHouses', label: 'Manage Houses', icon: Home },
     { id: 'sendNewsletter', label: 'Send Newsletter', icon: Mail },
+    { id: 'myProfile', label: 'My Profile', icon: User },
+    { id: 'manageAmenities', label: 'Manage Amenities', icon: Home },
+    { id: 'newsletterEmails', label: 'Newsletter Emails', icon: Mail },
+    { id: 'messages', label: 'Messages', icon: MessageCircle },
   ]
 
 
