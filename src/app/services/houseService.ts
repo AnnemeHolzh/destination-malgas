@@ -1,10 +1,21 @@
 import { ref, set, get, update, remove } from "firebase/database";
 import type { House } from "../DataModels/House";
-import { database } from "../Firebase/firebaseConfig";
+import { database, auth } from "../Firebase/firebaseConfig";
 
 // Create a new house
 export async function createHouse(house: House): Promise<void> {
   try {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not authenticated");
+    
+    // Verify staff role using the same path as security rules
+    const staffUserRef = ref(database, `users/${user.uid}/role`);
+    const roleSnapshot = await get(staffUserRef);
+    
+    if (roleSnapshot.val() !== 'staff') {
+      throw new Error('User lacks staff privileges');
+    }
+
     await set(ref(database, `houses/${house.houseId}`), house);
   } catch (error) {
     console.error('Error creating house:', error);

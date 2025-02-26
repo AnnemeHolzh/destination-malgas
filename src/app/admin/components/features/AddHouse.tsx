@@ -102,7 +102,8 @@ export default function AddHouse() {
       });
       setImages([]);
 
-    } catch {
+    } catch (error) {
+      console.error('Error creating house:', error);
       setError('Failed to create house. Please try again.');
     } finally {
       setLoading(false);

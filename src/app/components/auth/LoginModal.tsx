@@ -2,11 +2,17 @@ import { useState } from "react"
 import { X } from "lucide-react"
 import { Input } from "../ui/input"
 import { Button } from "../ui/contactButton"
+import { loginUser } from "../../services/authService"
+
+interface UserType {
+  role: string;
+  // Add other user properties as necessary
+}
 
 interface LoginModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onLogin: (email: string, password: string) => Promise<void>
+  isOpen: boolean;
+  onClose: () => void;
+  onLogin: (user: UserType) => void;
 }
 
 export function LoginModal({ isOpen, onClose, onLogin }: LoginModalProps) {
@@ -21,7 +27,11 @@ export function LoginModal({ isOpen, onClose, onLogin }: LoginModalProps) {
     setIsLoading(true)
 
     try {
-      await onLogin(email, password)
+      const user = await loginUser(email, password)
+      if (user.role !== 'staff') {
+        throw new Error('Access restricted to staff members')
+      }
+      onLogin(user)
       onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Login failed")
