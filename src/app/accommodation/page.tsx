@@ -22,13 +22,38 @@ export default function Accommodations() {
       try {
         const cachedData = cache.get('houses')
         if (cachedData) {
-          const activeHouses = cachedData.filter((house: House) => house.active)
-          setHouses(activeHouses)
+          // If we have cached data, fetch the full house data in the background
+          setHouses(cachedData.filter((house: House) => house.active))
+          
+          // Fetch fresh data in the background
+          getAllHouses().then(async (housesData) => {
+            const amenitiesData = await getAllAmenities()
+            const optimizedHouses = await Promise.all(housesData.map(async house => ({
+              ...house,
+              media: {
+                ...house.media,
+                photos: await Promise.all(house.media.photos.map(photo => 
+                  optimizeBase64Image(photo)
+                ))
+              }
+            })))
+            
+            const activeHouses = optimizedHouses.filter(house => house.active)
+            setHouses(activeHouses)
+            setAmenities(amenitiesData)
+            
+            // Cache houses without images
+            cache.set('houses', housesData)
+          })
           return
         }
 
-        const housesData = await getAllHouses()
-        const amenitiesData = await getAllAmenities()
+        // If no cache, fetch everything
+        const [housesData, amenitiesData] = await Promise.all([
+          getAllHouses(),
+          getAllAmenities()
+        ])
+        
         const optimizedHouses = await Promise.all(housesData.map(async house => ({
           ...house,
           media: {
@@ -39,12 +64,11 @@ export default function Accommodations() {
           }
         })))
         
-        // Filter active houses before setting state
         const activeHouses = optimizedHouses.filter(house => house.active)
         setHouses(activeHouses)
         setAmenities(amenitiesData)
         
-        // Cache all houses for admin purposes
+        // Cache houses without images
         cache.set('houses', housesData)
       } catch (err) {
         setError('Failed to fetch accommodations. Please try again later.')
