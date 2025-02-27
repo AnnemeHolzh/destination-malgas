@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { getAllHouses } from '../services/houseService'
 import { getAllAmenities } from '../services/amenityService'
 import { House } from '../DataModels/House'
@@ -13,9 +13,10 @@ import pageImage from '../../../public/Images/Accommodation/accommodation.png'
 import Image from 'next/image'
 import './accommodation.css'
 import HouseFilter from '@/app/components/housefilter'
+import { useIntersection } from '@mantine/hooks'
+import { useDeferredValue } from 'react'
 
 export default function Accommodations() {
-  const [houses, setHouses] = useState<House[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [amenities, setAmenities] = useState<Amenity[]>([])
@@ -24,6 +25,16 @@ export default function Accommodations() {
   const [minBaths, setMinBaths] = useState(1)
   const [guestCount, setGuestCount] = useState(1)
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([])
+  const [page, setPage] = useState(1)
+  const [allHouses, setAllHouses] = useState<House[]>([])
+  const deferredHouses = useDeferredValue(allHouses)
+
+  // Add pagination state
+  const lastHouseRef = useRef<HTMLDivElement>(null)
+  const { ref, entry } = useIntersection({
+    root: lastHouseRef.current,
+    threshold: 1,
+  })
 
   // Fetch houses from Firebase
   useEffect(() => {
@@ -32,7 +43,8 @@ export default function Accommodations() {
         const cachedData = cache.get('houses')
         if (cachedData) {
           // If we have cached data, fetch the full house data in the background
-          setHouses(cachedData.filter((house: House) => house.active))
+          setAllHouses(Array.isArray(cachedData) ? 
+            cachedData.filter((house: House) => house.active) : [])
           
           // Fetch fresh data in the background
           getAllHouses().then(async (housesData) => {
@@ -48,7 +60,7 @@ export default function Accommodations() {
             })))
             
             const activeHouses = optimizedHouses.filter(house => house.active)
-            setHouses(activeHouses)
+            setAllHouses(activeHouses)
             setAmenities(amenitiesData)
             
             // Cache houses without images
@@ -63,18 +75,28 @@ export default function Accommodations() {
           getAllAmenities()
         ])
         
-        const optimizedHouses = await Promise.all(housesData.map(async house => ({
-          ...house,
-          media: {
-            ...house.media,
-            photos: await Promise.all(house.media.photos.map(photo => 
-              optimizeBase64Image(photo)
-            ))
-          }
-        })))
+        // Process images in chunks
+        const chunkSize = 5
+        const optimizedChunks: House[] = []
+        const processChunk = async (chunk: House[]) => {
+          const optimized = await Promise.all(chunk.map(async house => ({
+            ...house,
+            media: {
+              ...house.media,
+              photos: await Promise.all(house.media.photos.map(photo => optimizeBase64Image(photo)))
+            }
+          })));
+          optimizedChunks.push(...optimized);
+        };
+
+        for (let i = 0; i < housesData.length; i += chunkSize) {
+          const chunk = housesData.slice(i, i + chunkSize);
+          await processChunk(chunk);
+        }
+        setAllHouses(optimizedChunks.filter(house => house.active));
         
-        const activeHouses = optimizedHouses.filter(house => house.active)
-        setHouses(activeHouses)
+        const activeHouses = optimizedChunks.filter(house => house.active)
+        setAllHouses(activeHouses)
         setAmenities(amenitiesData)
         
         // Cache houses without images
@@ -88,10 +110,17 @@ export default function Accommodations() {
     }
 
     fetchHouses()
-  }, [])
+  }, [page])
+
+  // Lazy load more houses when scrolled to bottom
+  useEffect(() => {
+    if (entry?.isIntersecting) {
+      setPage(prev => prev + 1)
+    }
+  }, [entry])
 
   // Add filtered houses calculation
-  const filteredHouses = houses.filter(house => {
+  const filteredHouses = deferredHouses.filter(house => {
     const matchesSearch = searchQuery ? 
       house.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
       house.description.toLowerCase().includes(searchQuery.toLowerCase()) : 
@@ -152,12 +181,10 @@ export default function Accommodations() {
       {/* Accommodations Grid */}
       <div className="container mx-auto mt-[-100px] px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredHouses.map((house) => (
-            <HouseCard 
-              key={house.houseId}
-              house={house}
-              amenitiesList={amenities}
-            />
+          {filteredHouses.map((house, index) => (
+            <div ref={index === filteredHouses.length - 1 ? ref : null} key={house.houseId}>
+              <HouseCard house={house} amenitiesList={amenities} />
+            </div>
           ))}
         </div>
       </div>

@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { House } from '../DataModels/House'
 import { Amenity } from '../DataModels/Amenity'
 import { Bed, Bath, Users } from 'lucide-react'
 import Image from 'next/image'
 import CustomButton from '@/app/components/ui/button'
 import Link from 'next/link'
+import { useIntersection } from '@mantine/hooks'
 
 interface HouseCardProps {
   house: House
@@ -13,40 +14,78 @@ interface HouseCardProps {
 
 const HouseCard = ({ house }: HouseCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
-  const [imageLoaded, setImageLoaded] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const imageRef = useRef<HTMLImageElement>(null)
+  const { ref, entry } = useIntersection({
+    root: null,
+    threshold: 0.25,
+    rootMargin: '600px',
+  })
   
   const shortDescription = house.shortDescription || '';
+
+  useEffect(() => {
+    const loadImage = async () => {
+      if (entry?.isIntersecting && !isLoaded) {
+        const img = new window.Image();
+        img.src = `data:image/webp;base64,${house.media.photos[0]}`;
+        await img.decode(); // Wait for image to fully decode
+        setIsLoaded(true);
+      }
+    };
+    
+    loadImage();
+  }, [entry, isLoaded, house.media.photos[0]]);
+
+  // Add validation before using the photo
+  const isValidBase64 = (str: string) => {
+    try {
+      return btoa(atob(str)) === str;
+    } catch (e) {
+      console.log(e)
+      return false;
+    }
+  };
 
   return (
     <Link href={`/accommodation/${house.houseId}`}>
       <div 
+        ref={ref}
         className="relative group overflow-hidden rounded-lg shadow-lg cursor-pointer transform transition-all duration-300 hover:scale-105 h-full"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Image Container */}
         <div className="relative pt-[56.25%]">
-          {!imageLoaded && (
+          {!isLoaded && (
             <div className="absolute inset-0 bg-gray-200 animate-pulse" />
           )}
           
-          {house.media.photos[0] && (
+          {house.media.photos[0] && isValidBase64(house.media.photos[0]) && (
             <>
               <Image
+                ref={imageRef}
                 src={`data:image/webp;base64,${house.media.photos[0]}`}
                 alt={house.name}
                 fill
-                className={`object-cover absolute top-0 left-0 w-full h-full transition-all duration-300 group-hover:blur-sm ${
-                  imageLoaded ? 'opacity-100' : 'opacity-0'
+                className={`object-cover absolute top-0 left-0 w-full h-full transition-opacity duration-500 ${
+                  isLoaded ? 'opacity-100' : 'opacity-0'
                 }`}
-                priority
                 loading="eager"
-                onLoadingComplete={() => setImageLoaded(true)}
-                quality={75}
+                priority={true}
+                decoding="async"
+                sizes="(max-width: 768px) 100vw, 50vw"
               />
               {/* Default Gradient Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             </>
+          )}
+
+          {/* Add fallback UI */}
+          {(house.media.photos[0] && !isValidBase64(house.media.photos[0])) && (
+            <div className="absolute inset-0 bg-gray-800 flex items-center justify-center">
+              <span className="text-white">Image unavailable</span>
+            </div>
           )}
         </div>
 

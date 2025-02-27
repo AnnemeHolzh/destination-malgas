@@ -19,4 +19,19 @@ export function optimizeBase64Image(base64: string, maxWidth = 800, quality = 0.
     
     img.onerror = reject;
   });
+}
+
+export async function generateBlurPlaceholder(base64: string): Promise<string> {
+  const img = new Image();
+  img.src = `data:image/jpeg;base64,${base64}`;
+  
+  await new Promise(resolve => img.onload = resolve);
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = 20;
+  canvas.height = Math.round((img.height / img.width) * 20);
+  
+  const ctx = canvas.getContext('2d');
+  ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL('image/webp', 0.2);
 } 
