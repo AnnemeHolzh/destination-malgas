@@ -4,7 +4,7 @@ import { Button } from "../components/ui/contactButton"
 import { Input } from "../components/ui/input"
 import { Textarea } from "../components/ui/textArea"
 import { useFormStatus } from "react-dom"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { sendEmail } from "../actions/contact"
 import { ref, set } from "firebase/database"
 import { database } from "../Firebase/firebaseConfig.js"
@@ -13,6 +13,86 @@ export default function ContactForm() {
   const [message, setMessage] = useState("")
   const [error, setError] = useState("")
   const [showOptions, setShowOptions] = useState(false)
+  const [bookingDetails, setBookingDetails] = useState<{
+    firstName: string
+    lastName: string
+    arrivalDate: string
+    departureDate: string
+    adults: string
+    kids: string
+    comments: string
+    houseName: string
+  } | null>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    // Parse booking details from URL
+    const params = new URLSearchParams(window.location.search)
+    if (params.size > 0) {
+      setBookingDetails({
+        firstName: params.get('firstName') ?? '',
+        lastName: params.get('lastName') ?? '',
+        arrivalDate: params.get('arrivalDate') ?? '',
+        departureDate: params.get('departureDate') ?? '',
+        adults: params.get('adults') ?? '1',
+        kids: params.get('kids') ?? '0',
+        comments: params.get('comments') ?? '',
+        houseName: params.get('houseName') ?? ''
+      })
+    }
+  }, [])
+
+  // Modify the form's initial values
+  const getInitialValue = (field: string) => {
+    if (!bookingDetails) return ''
+    
+    switch (field) {
+      case 'name':
+        return `${bookingDetails.firstName} ${bookingDetails.lastName}`
+      case 'subject':
+        return `Booking for ${bookingDetails.houseName} from ${formatDate(bookingDetails.arrivalDate)} to ${formatDate(bookingDetails.departureDate)}`
+      case 'message':
+        return `Booking Details:
+        -------------------------
+        House: ${bookingDetails.houseName}
+        Dates: ${formatDate(bookingDetails.arrivalDate)} - ${formatDate(bookingDetails.departureDate)}
+        Guests: ${bookingDetails.adults} adults, ${bookingDetails.kids} kids
+        -------------------------
+        Additional Notes:
+        ${bookingDetails.comments}
+        `
+      default:
+        return ''
+    }
+  }
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+  }
+
+  const clearForm = () => {
+    if (formRef.current) {
+      formRef.current.reset()
+      setShowOptions(false)
+      setMessage("")
+      setError("")
+    }
+  }
+
+  // Clear timeout when component unmounts
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault() // Prevent form from submitting and clearing
@@ -81,19 +161,60 @@ export default function ContactForm() {
     }
   }
 
+  const handleWhatsApp = () => {
+    const whatsappNumber = "27671629081"
+    const formData = new FormData(document.querySelector('form') as HTMLFormElement)
+    const subject = formData.get('subject') as string
+    const name = formData.get('name') as string
+    const email = formData.get('email') as string
+    const phone = formData.get('phone') as string
+    const messageText = formData.get('message') as string
+
+    const formattedMessage = `
+New Contact Form Submission
+---------------------------
+Name: ${name}
+Email: ${email}
+Phone: ${phone}
+Subject: ${subject}
+---------------------------
+Message:
+${messageText}
+    `.trim()
+
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(formattedMessage)}`
+    window.open(whatsappUrl, '_blank')
+    
+    // Clear form after 15 seconds
+    timeoutRef.current = setTimeout(() => clearForm(), 15000)
+  }
+
+  const handleEmail = async () => {
+    const formData = new FormData(formRef.current!)
+    const result = await sendEmail(formData)
+    
+    if (result.success) {
+      // Clear form after 15 seconds
+      timeoutRef.current = setTimeout(() => clearForm(), 15000)
+    } else {
+      setError(result.message)
+    }
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-4">
         <h2 className="text-4xl font-bold">Write a Message</h2>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-6" ref={formRef}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input 
             name="name" 
             placeholder="Full Name" 
             required 
             className="bg-gray-100 border-0" 
+            defaultValue={getInitialValue('name')}
           />
           <Input 
             name="email" 
@@ -114,6 +235,7 @@ export default function ContactForm() {
             placeholder="Subject" 
             required 
             className="bg-gray-100 border-0" 
+            defaultValue={getInitialValue('subject')}
           />
         </div>
 
@@ -122,6 +244,7 @@ export default function ContactForm() {
           placeholder="Write a Message"
           required
           className="bg-gray-100 border-0 min-h-[200px]"
+          defaultValue={getInitialValue('message')}
         />
 
         <div className="text-center">
@@ -135,58 +258,14 @@ export default function ContactForm() {
             <div className="flex justify-center gap-4">
               <Button
                 type="button"
-                onClick={() => {
-                  const whatsappNumber = "27671629081"
-                  const formData = new FormData(document.querySelector('form') as HTMLFormElement)
-                  const subject = formData.get('subject') as string
-                  const name = formData.get('name') as string
-                  const email = formData.get('email') as string
-                  const phone = formData.get('phone') as string
-                  const messageText = formData.get('message') as string
-
-                  const formattedMessage = `
-New Contact Form Submission
----------------------------
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Subject: ${subject}
----------------------------
-Message:
-${messageText}
-                  `.trim()
-
-                  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(formattedMessage)}`
-                  window.open(whatsappUrl, '_blank')
-                  
-                  // Reset form and hide options after sending
-                  const form = document.querySelector('form') as HTMLFormElement
-                  form?.reset()
-                  setShowOptions(false)
-                  setMessage("Message sent successfully via WhatsApp!")
-                }}
+                onClick={handleWhatsApp}
                 className="bg-green-600 hover:bg-green-700"
               >
                 Send via WhatsApp
               </Button>
               <Button
                 type="button"
-                onClick={async () => {
-                  const formData = new FormData(document.querySelector('form') as HTMLFormElement)
-                  console.log('Subject:', formData.get('subject')) // Debug log
-                  
-                  const result = await sendEmail(formData)
-                  
-                  if (result.success) {
-                    // Reset form and hide options after successful send
-                    const form = document.querySelector('form') as HTMLFormElement
-                    form?.reset()
-                    setShowOptions(false)
-                    setMessage(result.message)
-                  } else {
-                    setError(result.message)
-                  }
-                }}
+                onClick={handleEmail}
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 Send via Email
