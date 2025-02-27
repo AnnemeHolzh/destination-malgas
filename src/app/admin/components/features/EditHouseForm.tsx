@@ -8,6 +8,7 @@ import { X, Upload, Trash2 } from 'lucide-react'
 import { useDropzone } from 'react-dropzone'
 import Image from 'next/image'
 import { logErrorToFirebase } from '../../../services/errorService'
+import { updateHouse } from '../../../../utils/firebaseRest'
 
 interface EditHouseFormProps {
   house: House
@@ -131,10 +132,18 @@ export default function EditHouseForm({ house, isOpen, onClose, onUpdate }: Edit
         updatedAt: Date.now()
       }
 
+      // Use REST API for update
+      await updateHouse(updatedHouse.houseId, updatedHouse)
+      
+      // Update local state through parent component
       await onUpdate(updatedHouse)
-    } catch {
-      setError('Failed to update house')
-      await logErrorToFirebase(error, 'EditHouseForm/handleSubmit');
+      
+      // Clear new images after successful update
+      setNewImages([])
+    } catch (error) {
+      console.error('Update error:', error)
+      setError('Failed to update house. Please try again.')
+      await logErrorToFirebase(error, 'EditHouseForm/handleSubmit')
     } finally {
       setLoading(false)
     }

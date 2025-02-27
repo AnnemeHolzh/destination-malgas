@@ -8,8 +8,8 @@ import { X, Upload } from 'lucide-react';
 import { Amenity } from '../../../DataModels/Amenity';
 import Image from 'next/image';
 import { logErrorToFirebase } from '../../../services/errorService';
-import { chunkedDatabaseWrite } from '../../../utils/chunkedUpload';
 import UploadProgressBar from '../../../components/ui/UploadProgressBar';
+import { addHouse } from '../../../../utils/firebaseRest';
 
 interface ImageUpload extends UploadProgress {
   file: File;
@@ -77,17 +77,35 @@ export default function AddHouse() {
     setIsUploading(true);
 
     try {
-      // Convert all images to Base64
+      // Track processing progress
+      let processedCount = 0;
+      const totalImages = images.length;
+      
       const base64Promises = images.map(img => 
         processImage(img.file, (progress) => {
+          // Update individual image progress
           setImages(prev => prev.map(i => 
             i.file === img.file ? { ...i, ...progress } : i
           ));
+          
+          // Update overall progress
+          if (progress.progress === 100) {
+            processedCount++;
+            setUploadProgress(prev => ({
+              ...prev,
+              progress: Math.round((processedCount / totalImages) * 100),
+              currentChunk: processedCount,
+              totalChunks: totalImages
+            }));
+          }
         })
       );
 
       const base64Images = await Promise.all(base64Promises);
-
+      
+      // Final progress update before REST call
+      setUploadProgress(prev => ({ ...prev, progress: 100 }));
+      
       const newHouse: House = {
         ...house as House,
         houseId: generateHouseId(),
@@ -95,23 +113,13 @@ export default function AddHouse() {
         updatedAt: Date.now()
       };
 
-      // Calculate total chunks
-      const totalChunks = Math.ceil(base64Images.length / 5);
-      setUploadProgress(prev => ({ ...prev, totalChunks }));
-
-      // Use chunked upload with progress tracking
-      await chunkedDatabaseWrite(
-        `houses/${newHouse.houseId}`,
-        newHouse,
-        base64Images,
-        (progress) => {
-          setUploadProgress({
-            progress: (progress.uploadedImages / progress.totalImages) * 100,
-            currentChunk: progress.currentChunk,
-            totalChunks
-          });
+      await addHouse({
+        ...newHouse,
+        media: {
+          ...newHouse.media,
+          photos: base64Images
         }
-      );
+      });
       
       // Reset form
       setHouse({
@@ -133,8 +141,8 @@ export default function AddHouse() {
       setError('Failed to create house. Please try again.');
       await logErrorToFirebase(error, 'AddHouse/handleSubmit');
     } finally {
-      setLoading(false);
       setIsUploading(false);
+      setLoading(false);
     }
   };
 
