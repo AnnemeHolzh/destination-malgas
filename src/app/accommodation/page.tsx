@@ -29,14 +29,21 @@ export default function Accommodations() {
   useEffect(() => {
     const fetchHouses = async () => {
       try {
-        const cachedData = cache.get('houses')
-        if (cachedData) {
-          // If we have cached data, fetch the full house data in the background
-          setHouses(cachedData.filter((house: House) => house.active))
+        const [cachedHouses, cachedAmenities] = [
+          cache.get('houses'),
+          cache.get('amenities')
+        ]
+
+        // If we have both cached data, use it immediately
+        if (cachedHouses && cachedAmenities) {
+          setHouses(cachedHouses.filter((house: House) => house.active))
+          setAmenities(cachedAmenities)
           
           // Fetch fresh data in the background
-          getAllHouses().then(async (housesData) => {
-            const amenitiesData = await getAllAmenities()
+          Promise.all([
+            getAllHouses(),
+            getAllAmenities()
+          ]).then(async ([housesData, amenitiesData]) => {
             const optimizedHouses = await Promise.all(housesData.map(async house => ({
               ...house,
               media: {
@@ -51,13 +58,14 @@ export default function Accommodations() {
             setHouses(activeHouses)
             setAmenities(amenitiesData)
             
-            // Cache houses without images
+            // Update cache
             cache.set('houses', housesData)
+            cache.set('amenities', amenitiesData)
           })
           return
         }
 
-        // If no cache, fetch everything
+        // If no cache or partial cache, fetch everything
         const [housesData, amenitiesData] = await Promise.all([
           getAllHouses(),
           getAllAmenities()
@@ -77,11 +85,12 @@ export default function Accommodations() {
         setHouses(activeHouses)
         setAmenities(amenitiesData)
         
-        // Cache houses without images
+        // Cache both houses and amenities
         cache.set('houses', housesData)
+        cache.set('amenities', amenitiesData)
       } catch (err) {
         setError('Failed to fetch accommodations. Please try again later.')
-        console.error(err)
+        console.error('Error fetching data:', err)
       } finally {
         setLoading(false)
       }
@@ -91,21 +100,30 @@ export default function Accommodations() {
   }, [])
 
   // Add filtered houses calculation
-  const filteredHouses = houses.filter(house => {
-    const matchesSearch = searchQuery ? 
-      house.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      house.description.toLowerCase().includes(searchQuery.toLowerCase()) : 
-      true
+  const filteredHouses = (() => {
+    try {
+      return houses.filter(house => {
+        if (!house) return false;
+        
+        const matchesSearch = searchQuery ? 
+          house.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+          house.description?.toLowerCase().includes(searchQuery.toLowerCase()) : 
+          true
 
-    const matchesBeds = house.beds >= minBeds
-    const matchesBaths = house.baths >= minBaths
-    const matchesGuests = house.capacity >= guestCount
-    const matchesAmenities = selectedAmenities.length > 0 ? 
-      selectedAmenities.every(amenityId => house.amenities[amenityId]) : 
-      true
+        const matchesBeds = house.beds >= minBeds
+        const matchesBaths = house.baths >= minBaths
+        const matchesGuests = house.capacity >= guestCount
+        const matchesAmenities = selectedAmenities.length > 0 ? 
+          selectedAmenities.every(amenityId => house.amenities?.[amenityId]) : 
+          true
 
-    return matchesSearch && matchesBeds && matchesBaths && matchesGuests && matchesAmenities
-  })
+        return matchesSearch && matchesBeds && matchesBaths && matchesGuests && matchesAmenities
+      })
+    } catch (error) {
+      console.error('Error filtering houses:', error)
+      return []
+    }
+  })()
 
   if (loading) {
     return (
