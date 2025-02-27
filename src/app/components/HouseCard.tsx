@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { House } from '../DataModels/House'
 import { Amenity } from '../DataModels/Amenity'
-import { Bed, Bath, Check, Users } from 'lucide-react'
+import { Bed, Bath, Users } from 'lucide-react'
 import Image from 'next/image'
 import CustomButton from '@/app/components/ui/button'
 import Link from 'next/link'
@@ -11,18 +11,10 @@ interface HouseCardProps {
   amenitiesList: Amenity[]
 }
 
-const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
+const HouseCard = ({ house }: HouseCardProps) => {
   const [isHovered, setIsHovered] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   
-  // Get first two available amenities
-  const firstTwoAmenities = Object.entries(house.amenities)
-    .filter(([, value]) => value)
-    .slice(0, 3)
-    .map(([id]) => amenitiesList.find(a => a.amenityId === id))
-    .filter(Boolean) as Amenity[]
-
-  // Extract first sentence of description
   const shortDescription = house.shortDescription || '';
 
   return (
@@ -75,7 +67,6 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
                 onClick={(e: React.MouseEvent) => {
                   e.preventDefault()
                   e.stopPropagation()
-                  // Add booking logic here
                 }}
                 className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20"
               >
@@ -83,44 +74,20 @@ const HouseCard = ({ house, amenitiesList }: HouseCardProps) => {
               </CustomButton>
             </div>
 
-            {/* Bottom Row */}
-            <div className="w-full flex flex-col items-center gap-4 mt-auto">
-              {/* Beds & Baths + Amenities */}
-              <div className="flex justify-center items-center gap-6">
-                {/* Beds & Baths */}
-                <div className="flex gap-4 text-white">
-                  <div className="flex items-center gap-2">
-                    <Bed className="w-5 h-5" />
-                    <span>{house.beds}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Bath className="w-5 h-5" />
-                    <span>{house.baths}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="w-5 h-5" />
-                    <span>{house.capacity}</span>
-                  </div>
+            {/* Bottom Row - Beds/Baths/Guests */}
+            <div className="w-full flex justify-center items-center gap-6 mt-auto">
+              <div className="flex gap-4 text-white">
+                <div className="flex items-center gap-2">
+                  <Bed className="w-5 h-5" />
+                  <span>{house.beds}</span>
                 </div>
-
-                {/* Amenities */}
-                <div className="flex gap-4">
-                  {firstTwoAmenities.map((amenity) => (
-                    <div key={amenity.amenityId} className="flex items-center gap-2">
-                      <div
-                        className="w-6 h-6"
-                        dangerouslySetInnerHTML={{ 
-                          __html: Buffer.from(amenity.icon.split(',')[1], 'base64').toString()
-                            .replace('<svg', '<svg width="100%" height="100%" preserveAspectRatio="xMidYMid meet"')
-                            .replace(/<path/g, '<path fill="white"')
-                            .replace(/<circle/g, '<circle fill="white"')
-                            .replace(/<rect/g, '<rect fill="white"')
-                            .replace(/<polygon/g, '<polygon fill="white"')
-                        }}
-                      />
-                      <Check className="w-4 h-4 text-green-400" />
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2">
+                  <Bath className="w-5 h-5" />
+                  <span>{house.baths}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="w-5 h-5" />
+                  <span>{house.capacity}</span>
                 </div>
               </div>
             </div>

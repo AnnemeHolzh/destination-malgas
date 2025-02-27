@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getHouseById } from '@/app/services/houseService'
 import { getAllAmenities } from '@/app/services/amenityService'
 import Image from 'next/image'
@@ -7,15 +8,25 @@ import ImageGalleryWrapper from '@/app/components/ImageGalleryWrapper'
 import { parseDescription } from '@/utils/parseDescription'
 
 type Props = {
-  params: { houseId: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ houseId: string }>
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
-export default async function HousePage({
-  params,
-}: Props) {
+export async function generateMetadata(
+  { params }: Props
+): Promise<Metadata> {
+  const resolvedParams = await params
+  const house = await getHouseById(resolvedParams.houseId)
+  return {
+    title: house?.name ?? 'House Details',
+    description: house?.shortDescription ?? 'View house details'
+  }
+}
+
+export default async function HousePage({ params }: Props) {
+  const resolvedParams = await params
   const [house, amenities] = await Promise.all([
-    getHouseById(params.houseId),
+    getHouseById(resolvedParams.houseId),
     getAllAmenities()
   ])
 
@@ -106,10 +117,14 @@ export default async function HousePage({
         <div className="space-y-4">
           {parseDescription(house.description).map((section, index) => (
             <div key={index}>
-              {section.type === 'heading' ? (
-                <h3 className="text-2xl font-bold mb-2">{section.content}</h3>
+              {section.type === 'h1' ? (
+                <h1 className="text-3xl font-custom4 mb-4 mt-8">{section.content}</h1>
+              ) : section.type === 'h2' ? (
+                <h2 className="text-xl font-custom4 mb-3 mt-6">{section.content}</h2>
+              ) : section.type === 'h3' ? (
+                <h3 className="text-1xl font-custom4 mb-2 mt-4">{section.content}</h3>
               ) : (
-                <p className="text-gray-300 text-lg">{section.content}</p>
+                <p className="text-gray-300 font-custom3 text-lg">{section.content}</p>
               )}
             </div>
           ))}
