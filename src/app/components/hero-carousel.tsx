@@ -21,6 +21,7 @@ import c_slide4 from "../../../public/Images/Landing/Section1/carousel/carousel_
 import c_slide5 from "../../../public/Images/Landing/Section1/carousel/carousel_img5.png"
 import c_slide6 from "../../../public/Images/Landing/Section1/carousel/carousel_img6.png"
 import c_slide7 from "../../../public/Images/Landing/Section1/carousel/carousel_img7.png"
+import Link from "next/link"
 
 const carouselItems = [
   {
@@ -141,8 +142,10 @@ export function HeroCarousel() {
               {currentItem.description}
             </p>
             <div className={`self-start mt-4 ${window.innerWidth < 768 ? 'flex justify-center' : ''}`}>
-              <CustomButton text="Contact Us" />
-            </div>
+                <Link href="/contact-us">
+                  <CustomButton>Contact Us</CustomButton>
+                </Link>
+              </div>
           </div>
 
           <div className={`hidden lg:flex flex-1 justify-end items-center overflow-hidden pr-0 ${styles.imageWrapper} ${isAnimating ? styles.animating : ''}`}>

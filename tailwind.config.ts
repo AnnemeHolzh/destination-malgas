@@ -15,7 +15,7 @@ export default {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
         custom1: ['FeelingPassionate', 'cursive'],
-        custom2: ['GlossAndBloom', 'sans-serif'],
+        custom2: ['FeelingPassionate', 'cursive'],
         custom3: ['Montserrat-Regular', 'sans-serif'],
         custom4: ['Montserrat-ExtraBold', 'sans-serif'],
       },

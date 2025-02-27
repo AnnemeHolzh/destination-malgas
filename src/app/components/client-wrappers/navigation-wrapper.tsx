@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname } from 'next/navigation'
 import dynamic from 'next/dynamic'
 
 const Navigation = dynamic(
@@ -7,14 +8,13 @@ const Navigation = dynamic(
   { ssr: false }
 )
 
-// Remove the unused navigation array
-// const navigation = [
-//   { name: 'Home', href: '/' },
-//   { name: 'About', href: '/about' },
-//   { name: 'Accommodations', href: '/accommodations' },
-//   { name: 'Contact', href: '/contact-us' },
-// ]
-
 export function NavigationWrapper() {
+  const pathname = usePathname()
+  
+  // Don't render navigation for admin routes
+  if (pathname?.startsWith('/admin')) {
+    return null
+  }
+
   return <Navigation />
 }
