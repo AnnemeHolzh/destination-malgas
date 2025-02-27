@@ -93,8 +93,8 @@ export default async function HousePage({ params }: Props) {
             </div>
 
             {/* Other Amenities */}
-            {amenities
-              .filter(amenity => house.amenities[amenity.amenityId])
+            {(amenities || [])
+              .filter(amenity => house.amenities && house.amenities[amenity.amenityId])
               .map(amenity => (
                 <div 
                   key={amenity.amenityId}
