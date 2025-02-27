@@ -87,6 +87,21 @@ export function Navigation() {
     setIsLoginModalOpen(false)
   }
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      const header = document.getElementById('header')
+      if (header) {
+        const style = getComputedStyle(header)
+        const headerHeight = parseInt(style.height)
+        setIsVisible(scrollY < headerHeight)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <>
       <nav 
